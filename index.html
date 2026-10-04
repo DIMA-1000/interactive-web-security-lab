@@ -32,15 +32,15 @@
     }
 
     .top-label {
-      color: #3fb950;
-      font-size: 19px;
-      font-weight: 800;
+      color: #58a6ff;
+      font-size: 14px;
+      font-weight: 700;
       letter-spacing: 3px;
       margin-bottom: 18px;
     }
 
     h1 {
-      font-size: clamp(38px, 6vw, 68px);
+      font-size: clamp(42px, 7vw, 82px);
       line-height: 0.95;
       letter-spacing: -2px;
       margin-bottom: 18px;
@@ -52,7 +52,7 @@
     }
 
     .subtitle {
-      font-size: 30px;
+      font-size: 24px;
       font-weight: 700;
       margin-bottom: 10px;
     }
@@ -69,19 +69,6 @@
       font-weight: 700;
       letter-spacing: 2px;
       margin-bottom: 45px;
-    }
-
-    .section-label {
-      color: #3fb950;
-      font-size: 16px;
-      font-weight: 800;
-      letter-spacing: 2px;
-      margin-bottom: 8px;
-    }
-
-    .section-title {
-      font-size: 30px;
-      margin-bottom: 24px;
     }
 
     .labs {
@@ -118,9 +105,9 @@
     }
 
     .lab-number {
-      color: #3fb950;
-      font-size: 15px;
-      font-weight: 800;
+      color: #58a6ff;
+      font-size: 12px;
+      font-weight: 700;
       letter-spacing: 2px;
       margin-bottom: 14px;
     }
@@ -164,6 +151,9 @@
     }
 
     footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
       margin-top: 45px;
       padding-top: 22px;
       border-top: 1px solid #21262d;
@@ -171,24 +161,7 @@
       font-size: 13px;
     }
 
-    .footer-line {
-      display: flex;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
-
-    .portfolio {
-      color: #b1bac4;
-    }
-
-    .thanks {
-      color: #6e7681;
-      font-size: 12px;
-    }
-
     .secure {
-      margin-top: 12px;
       color: #3fb950;
       font-weight: 700;
       letter-spacing: 1px;
@@ -203,8 +176,8 @@
         grid-template-columns: 1fr;
       }
 
-      .subtitle {
-        font-size: 25px;
+      footer {
+        flex-direction: column;
       }
     }
   </style>
@@ -217,7 +190,8 @@
     <div class="top-label">SECURITY // LAB</div>
 
     <h1>
-      DMYTRO <span>SHMELOV</span>
+      DMYTRO<br>
+      <span>SHMELOV</span>
     </h1>
 
     <div class="subtitle">Interactive Web Security Lab</div>
@@ -229,9 +203,6 @@
     <div class="skills">
       WEB SECURITY • API TESTING • SECURITY AUTOMATION
     </div>
-
-    <div class="section-label">// SECURITY MODULES</div>
-    <h2 class="section-title">Interactive Labs</h2>
 
     <section class="labs">
 
@@ -279,11 +250,7 @@
     </section>
 
     <footer>
-      <div class="footer-line">
-        <span class="portfolio">Dmytro Shmelov — Web Security Portfolio</span>
-        <span class="thanks">(Special thanks to Frederick for guidance and support)</span>
-      </div>
-
+      <div>Dmytro Shmelov — Web Security Portfolio</div>
       <div class="secure">● SYSTEM STATUS // SECURE</div>
     </footer>
 
