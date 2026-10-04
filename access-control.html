@@ -2,104 +2,236 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Broken Access Control Lab</title>
+
 <style>
-body{margin:0;background:#0b0f14;color:#fff;font-family:Arial,sans-serif}
-main{max-width:850px;margin:auto;padding:35px 20px}
-a{color:#58a6ff}
-section{background:#151b23;border:1px solid #30363d;border-radius:12px;padding:24px;margin:20px 0}
-input,select,button{padding:12px;border-radius:6px;margin:5px 0;font-size:16px}
-input,select{background:#0d1117;color:white;border:1px solid #484f58}
-button{background:#238636;color:white;border:0;cursor:pointer}
-pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#0d1117;padding:18px;border-radius:8px}
-p{line-height:1.6;color:#b8c0cc}
-</style>
-</head>
-<body>
-<main>
-<a href="index.html">← Back to labs</a>
-<h1>Broken Access Control</h1>
-<p>Local simulation with fictional records. Current user: Alice, ID 1.
-Real authorization must run on the server.</p>
+* { box-sizing: border-box; }
 
-<section>
-<h2>Request a document</h2>
-<label for="documentId">Document ID:</label>
-<input id="documentId" type="number" value="101" min="1" step="1">
-<br>
-<label for="mode">Authorization:</label>
-<select id="mode">
-<option value="vulnerable">Vulnerable: no owner check</option>
-<option value="secure">Secure: check document owner</option>
-</select>
-<br>
-<button id="request">Send simulated request</button>
-<button id="tests">Run tests</button>
-<pre id="result" aria-live="polite">Try ID 101, then 102.</pre>
-</section>
-
-<section>
-<h2>What to test</h2>
-<p>101 belongs to Alice. 102 belongs to Bob.
-In vulnerable mode Alice can read Bob's record.
-In secure mode access to 102 is denied.</p>
-<p>This page demonstrates the logic. All fictional records are
-visible in its source; it does not provide real protection.</p>
-</section>
-</main>
-
-<script>
-const records = {
-  101: { id: 101, ownerId: 1, title: "Alice's fictional document" },
-  102: { id: 102, ownerId: 2, title: "Bob's fictional document" }
-};
-const currentUserId = 1;
-const output = document.getElementById("result");
-
-function requestDocument(rawId, secure) {
-  if (!/^[1-9]\d*$/.test(String(rawId))) {
-    return { status: 400, body: { error: "Invalid document ID" } };
-  }
-  const id = Number(rawId);
-  if (!Number.isSafeInteger(id)) {
-    return { status: 400, body: { error: "Invalid document ID" } };
-  }
-  const record = records[id];
-  if (!record) {
-    return { status: 404, body: { error: "Document not found" } };
-  }
-  if (secure && record.ownerId !== currentUserId) {
-    return { status: 403, body: { error: "Access denied" } };
-  }
-  return { status: 200, body: record };
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #0d1117;
+    color: #e6edf3;
 }
 
-document.getElementById("request").onclick = function () {
-  const id = document.getElementById("documentId").value;
-  const secure = document.getElementById("mode").value === "secure";
-  const response = requestDocument(id, secure);
-  output.textContent =
-    "SIMULATED GET /api/documents/" + encodeURIComponent(id) +
-    "\nHTTP " + response.status +
-    "\n" + JSON.stringify(response.body, null, 2);
+.container {
+    max-width: 900px;
+    margin: 50px auto;
+    padding: 25px;
+}
+
+a {
+    color: #58a6ff;
+    text-decoration: none;
+}
+
+h1 { font-size: 38px; }
+
+.subtitle { color: #9da7b3; }
+
+.lab {
+    margin-top: 30px;
+    padding: 28px;
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 12px;
+}
+
+input {
+    width: 100%;
+    padding: 14px;
+    margin: 10px 0 20px;
+    background: #0d1117;
+    border: 1px solid #484f58;
+    border-radius: 6px;
+    color: white;
+    font-size: 16px;
+}
+
+.buttons {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+button {
+    padding: 14px 24px;
+    border-radius: 7px;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+button.vulnerable {
+    background: #da3633 !important;
+    border: 2px solid #f85149 !important;
+    color: #ffffff !important;
+}
+
+button.protected {
+    background: #238636 !important;
+    border: 2px solid #3fb950 !important;
+    color: #ffffff !important;
+}
+
+.result {
+    margin-top: 25px;
+    padding: 20px;
+    min-height: 120px;
+    background: #0d1117;
+    border-radius: 8px;
+    white-space: pre-wrap;
+}
+
+.result.bad {
+    background: #2d1215 !important;
+    border: 2px solid #f85149 !important;
+}
+
+.result.good {
+    background: #10261a !important;
+    border: 2px solid #3fb950 !important;
+}
+
+.info {
+    margin-top: 25px;
+    color: #9da7b3;
+    line-height: 1.6;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<a href="index.html">← Back to Security Lab</a>
+
+<h1>Broken Access Control / IDOR</h1>
+
+<p class="subtitle">
+Current user: Alice (User ID 1). Test access to fictional documents.
+</p>
+
+<div class="lab">
+
+<label><strong>Document ID</strong></label>
+<input id="documentId" value="102">
+
+<div class="buttons">
+
+<button class="vulnerable" onclick="runVulnerable()">
+🔓 Run Vulnerable
+</button>
+
+<button class="protected" onclick="runProtected()">
+🛡 Run Protected
+</button>
+
+</div>
+
+<div id="result" class="result">
+Document 101 belongs to Alice. Document 102 belongs to Bob.
+</div>
+
+</div>
+
+<div class="info">
+The vulnerable version returns a document without checking ownership.
+The protected version checks authorization before returning the resource.
+This is a local educational simulation using fictional data.
+</div>
+
+</div>
+
+<script>
+const documents = {
+    "101": {
+        owner: "Alice",
+        content: "Alice private document"
+    },
+    "102": {
+        owner: "Bob",
+        content: "Bob private document"
+    }
 };
 
-document.getElementById("tests").onclick = function () {
-  const cases = [
-    ["Own document, secure", "101", true, 200],
-    ["Other owner's document, vulnerable", "102", false, 200],
-    ["Other owner's document, secure", "102", true, 403],
-    ["Missing document", "999", true, 404],
-    ["Invalid ID", "abc", true, 400],
-    ["Negative ID", "-1", true, 400]
-  ];
-  output.textContent = cases.map(function (test) {
-    const actual = requestDocument(test[1], test[2]).status;
-    return (actual === test[3] ? "PASS" : "FAIL") +
-      " | " + test[0] + " | HTTP " + actual;
-  }).join("\n");
-};
+function runVulnerable() {
+
+    const id = document.getElementById("documentId").value.trim();
+    const result = document.getElementById("result");
+    const doc = documents[id];
+
+    result.className = "result bad";
+
+    if (!doc) {
+        result.textContent =
+`VULNERABLE REQUEST
+
+HTTP 404
+Document not found.`;
+        return;
+    }
+
+    result.textContent =
+`🔴 VULNERABLE — ACCESS GRANTED
+
+GET /api/documents/${id}
+
+HTTP 200 OK
+
+Owner: ${doc.owner}
+Content: ${doc.content}
+
+SECURITY ISSUE:
+No ownership authorization check was performed.`;
+}
+
+function runProtected() {
+
+    const id = document.getElementById("documentId").value.trim();
+    const result = document.getElementById("result");
+    const doc = documents[id];
+
+    result.className = "result good";
+
+    if (!doc) {
+        result.textContent =
+`🟢 PROTECTED
+
+HTTP 404
+Document not found.`;
+        return;
+    }
+
+    if (doc.owner !== "Alice") {
+        result.textContent =
+`🟢 PROTECTED — ACCESS DENIED
+
+GET /api/documents/${id}
+
+HTTP 403 Forbidden
+
+Current user: Alice
+Resource owner: ${doc.owner}
+
+Authorization check successfully blocked access.`;
+        return;
+    }
+
+    result.textContent =
+`🟢 PROTECTED — ACCESS GRANTED
+
+HTTP 200 OK
+
+Owner: ${doc.owner}
+Content: ${doc.content}
+
+Ownership successfully verified.`;
+}
 </script>
+
 </body>
 </html>

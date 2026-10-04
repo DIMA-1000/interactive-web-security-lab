@@ -1,151 +1,703 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Dmytro Shmelov | Interactive Web Security Lab</title>
+<title>Dmytro Shmelov | Interactive Web Security Lab</title>
 
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: #0b0f14;
-            color: white;
-        }
+<style>
+* {
+    box-sizing: border-box;
+}
 
-        header {
-            text-align: center;
-            padding: 70px 20px 40px;
-        }
+html {
+    scroll-behavior: smooth;
+}
 
-        h1 {
-            font-size: 42px;
-            margin-bottom: 10px;
-        }
+body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: Inter, Arial, Helvetica, sans-serif;
+    color: #e6edf3;
+    background:
+        radial-gradient(circle at 80% 20%, rgba(0, 255, 170, 0.08), transparent 28%),
+        radial-gradient(circle at 15% 80%, rgba(0, 140, 255, 0.07), transparent 30%),
+        #070b10;
+    overflow-x: hidden;
+}
 
-        header p {
-            color: #9ca3af;
-            font-size: 18px;
-        }
+/* ===== TECHNOLOGY BACKGROUND ===== */
 
-        .name {
-            color: white;
-            font-weight: bold;
-        }
+.cyber-background {
+    position: fixed;
+    inset: 0;
+    z-index: -3;
+    overflow: hidden;
+    pointer-events: none;
+}
 
-        .labs {
-            max-width: 900px;
-            margin: auto;
-            padding: 20px;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-        }
+/* Technical grid */
+.cyber-background::before {
+    content: "";
+    position: absolute;
+    inset: 0;
 
-        .card {
-            background: #151b23;
-            border: 1px solid #30363d;
-            border-radius: 12px;
-            padding: 25px;
-        }
+    background-image:
+        linear-gradient(rgba(63, 185, 130, 0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(63, 185, 130, 0.035) 1px, transparent 1px);
 
-        .card h2 {
-            margin-top: 0;
-        }
+    background-size: 42px 42px;
 
-        .status {
-            color: #ff5c5c;
-            font-weight: bold;
-        }
+    mask-image:
+        linear-gradient(to bottom, rgba(0,0,0,.9), rgba(0,0,0,.25));
+}
 
-        button {
-            background: #238636;
-            color: white;
-            border: 0;
-            border-radius: 6px;
-            padding: 11px 18px;
-            cursor: pointer;
-            font-size: 15px;
-        }
+/* Soft security glow */
+.cyber-background::after {
+    content: "";
+    position: absolute;
 
-        button:hover {
-            background: #2ea043;
-        }
+    width: 650px;
+    height: 650px;
 
-        .disabled {
-            background: #30363d;
-            cursor: default;
-        }
+    right: -220px;
+    top: 80px;
 
-        .disabled:hover {
-            background: #30363d;
-        }
+    border-radius: 50%;
 
-        footer {
-            text-align: center;
-            color: #8b949e;
-            padding: 50px 20px;
-        }
-    </style>
+    background:
+        radial-gradient(
+            circle,
+            rgba(46, 160, 100, 0.09),
+            rgba(0, 120, 255, 0.025) 45%,
+            transparent 70%
+        );
+
+    filter: blur(5px);
+}
+
+/* Circuit board lines */
+
+.circuit {
+    position: absolute;
+    opacity: 0.16;
+}
+
+.circuit.one {
+    width: 420px;
+    height: 220px;
+    right: -40px;
+    top: 170px;
+
+    border-top: 1px solid #39d98a;
+    border-left: 1px solid #39d98a;
+}
+
+.circuit.one::before {
+    content: "";
+    position: absolute;
+
+    width: 250px;
+    height: 90px;
+
+    top: 55px;
+    left: -90px;
+
+    border-top: 1px solid #39d98a;
+    border-right: 1px solid #39d98a;
+    border-bottom: 1px solid #39d98a;
+}
+
+.circuit.one::after {
+    content: "";
+
+    position: absolute;
+
+    width: 9px;
+    height: 9px;
+
+    left: -95px;
+    top: 50px;
+
+    background: #39d98a;
+    border-radius: 50%;
+
+    box-shadow:
+        90px 90px 0 #39d98a,
+        260px 0 0 #58a6ff,
+        340px 90px 0 #39d98a;
+}
+
+.circuit.two {
+    width: 350px;
+    height: 200px;
+
+    left: -130px;
+    bottom: 80px;
+
+    border-right: 1px solid #58a6ff;
+    border-bottom: 1px solid #58a6ff;
+}
+
+.circuit.two::after {
+    content: "";
+
+    position: absolute;
+
+    width: 8px;
+    height: 8px;
+
+    right: -5px;
+    top: 30px;
+
+    background: #58a6ff;
+    border-radius: 50%;
+
+    box-shadow:
+        -90px 70px 0 #39d98a,
+        70px 120px 0 #58a6ff;
+}
+
+/* Large security shield */
+
+.shield {
+    position: absolute;
+
+    right: 7%;
+    top: 110px;
+
+    width: 240px;
+    height: 280px;
+
+    opacity: 0.055;
+
+    border: 3px solid #58f0b0;
+
+    clip-path: polygon(
+        50% 0%,
+        92% 15%,
+        87% 65%,
+        50% 100%,
+        13% 65%,
+        8% 15%
+    );
+}
+
+.shield::before {
+    content: "SECURE";
+
+    position: absolute;
+
+    top: 115px;
+    left: 0;
+    right: 0;
+
+    text-align: center;
+
+    font-size: 27px;
+    font-weight: 800;
+    letter-spacing: 6px;
+
+    color: #58f0b0;
+}
+
+/* ===== PAGE ===== */
+
+.container {
+    width: 92%;
+    max-width: 1100px;
+    margin: auto;
+
+    padding: 75px 0 70px;
+}
+
+/* ===== HERO ===== */
+
+.security-label {
+    display: inline-block;
+
+    margin-bottom: 18px;
+
+    color: #39d98a;
+
+    font-family: monospace;
+    font-size: 13px;
+    font-weight: bold;
+
+    letter-spacing: 4px;
+}
+
+.name {
+    margin: 0;
+
+    font-size: clamp(44px, 7vw, 76px);
+
+    line-height: 0.95;
+
+    font-weight: 900;
+
+    letter-spacing: -2px;
+
+    color: #ffffff;
+
+    text-shadow:
+        0 0 18px rgba(63, 185, 128, 0.13),
+        0 0 40px rgba(56, 139, 253, 0.06);
+}
+
+.name-accent {
+    color: #39d98a;
+}
+
+.title {
+    margin: 20px 0 8px;
+
+    font-size: clamp(25px, 4vw, 38px);
+
+    font-weight: 700;
+
+    color: #d7dee7;
+}
+
+.subtitle {
+    margin: 0;
+
+    color: #8b949e;
+
+    font-size: 18px;
+}
+
+.skills {
+    margin-top: 22px;
+
+    color: #58a6ff;
+
+    font-family: monospace;
+
+    font-size: 14px;
+
+    letter-spacing: 1px;
+}
+
+.description {
+    max-width: 720px;
+
+    margin-top: 25px;
+
+    color: #a8b3bf;
+
+    line-height: 1.7;
+
+    font-size: 16px;
+}
+
+/* ===== DIVIDER ===== */
+
+.divider {
+    height: 1px;
+
+    margin: 48px 0 35px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #238636,
+            rgba(88,166,255,.45),
+            transparent
+        );
+}
+
+/* ===== LAB TITLE ===== */
+
+.section-label {
+    color: #39d98a;
+
+    font-family: monospace;
+
+    font-size: 12px;
+
+    letter-spacing: 3px;
+}
+
+.section-title {
+    margin: 8px 0 25px;
+
+    font-size: 28px;
+}
+
+/* ===== CARDS ===== */
+
+.grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(auto-fit, minmax(240px, 1fr));
+
+    gap: 20px;
+}
+
+.card {
+    position: relative;
+
+    padding: 25px;
+
+    min-height: 245px;
+
+    display: flex;
+    flex-direction: column;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(22,27,34,.95),
+            rgba(13,17,23,.92)
+        );
+
+    border: 1px solid #30363d;
+
+    border-radius: 12px;
+
+    overflow: hidden;
+
+    transition:
+        transform .25s ease,
+        border-color .25s ease,
+        box-shadow .25s ease;
+}
+
+.card::before {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 2px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            #39d98a,
+            #58a6ff,
+            transparent
+        );
+
+    opacity: .45;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+
+    border-color: rgba(57,217,138,.55);
+
+    box-shadow:
+        0 15px 35px rgba(0,0,0,.35),
+        0 0 22px rgba(57,217,138,.055);
+}
+
+.lab-code {
+    color: #39d98a;
+
+    font-family: monospace;
+
+    font-size: 12px;
+
+    letter-spacing: 2px;
+}
+
+.card h3 {
+    margin: 13px 0 10px;
+
+    font-size: 21px;
+
+    color: #f0f6fc;
+}
+
+.card p {
+    margin: 0 0 25px;
+
+    color: #8b949e;
+
+    line-height: 1.55;
+
+    flex-grow: 1;
+}
+
+/* ===== BUTTON ===== */
+
+.open-button {
+    display: inline-block;
+
+    width: fit-content;
+
+    padding: 11px 18px;
+
+    border-radius: 6px;
+
+    background: #238636;
+
+    color: white;
+
+    text-decoration: none;
+
+    font-weight: 700;
+
+    transition:
+        background .2s ease,
+        box-shadow .2s ease,
+        transform .2s ease;
+}
+
+.open-button:hover {
+    background: #2ea043;
+
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 0 18px rgba(46,160,67,.25);
+}
+
+/* ===== FOOTER ===== */
+
+.footer {
+    margin-top: 55px;
+
+    padding-top: 25px;
+
+    border-top: 1px solid #21262d;
+
+    color: #6e7681;
+
+    font-size: 13px;
+
+    display: flex;
+
+    justify-content: space-between;
+
+    gap: 15px;
+
+    flex-wrap: wrap;
+}
+
+.footer span:last-child {
+    color: #39d98a;
+
+    font-family: monospace;
+}
+
+/* ===== MOBILE ===== */
+
+@media (max-width: 600px) {
+
+    .container {
+        padding-top: 48px;
+    }
+
+    .name {
+        letter-spacing: -1px;
+    }
+
+    .skills {
+        line-height: 1.7;
+    }
+
+    .shield {
+        right: -100px;
+        opacity: .035;
+    }
+}
+
+</style>
 </head>
 
 <body>
 
-<header>
-    <h1>Interactive Web Security Lab</h1>
-    <p>Practical Web & API Security Testing</p>
-    <p class="name">Dmytro Shmelov</p>
-</header>
+<!-- Cybersecurity background -->
 
-<section class="labs">
+<div class="cyber-background">
 
-    <div class="card">
-        <h2>Cross-Site Scripting (XSS)</h2>
-        <p class="status">VULNERABLE LAB</p>
-        <p>Interactive demonstration of unsafe HTML rendering and its secure alternative.</p>
+    <div class="circuit one"></div>
+    <div class="circuit two"></div>
 
-        <button onclick="window.location.href='xss.html'">
-            Open Lab
-        </button>
+    <div class="shield"></div>
+
+</div>
+
+
+<main class="container">
+
+    <!-- HERO -->
+
+    <div class="security-label">
+        SECURITY // LAB
     </div>
 
-    <div class="card">
-        <h2>Broken Access Control</h2>
-        <p class="status">COMING NEXT</p>
-        <p>Authorization and object-level access control demonstration.</p>
+    <h1 class="name">
+        DMYTRO <span class="name-accent">SHMELOV</span>
+    </h1>
 
-        <button class="disabled">
-            Coming Soon
-        </button>
+    <h2 class="title">
+        Interactive Web Security Lab
+    </h2>
+
+    <p class="subtitle">
+        Practical Web & API Security Testing
+    </p>
+
+    <div class="skills">
+        WEB SECURITY&nbsp;&nbsp;•&nbsp;&nbsp;
+        API TESTING&nbsp;&nbsp;•&nbsp;&nbsp;
+        SECURITY AUTOMATION
     </div>
 
-    <div class="card">
-        <h2>SQL Injection</h2>
-        <p class="status">COMING NEXT</p>
-        <p>Vulnerable database query versus parameterized query.</p>
+    <p class="description">
+        Interactive demonstrations of vulnerable and protected web
+        application behavior. Explore common security weaknesses and
+        compare insecure implementations with safer alternatives.
+    </p>
 
-        <button class="disabled">
-            Coming Soon
-        </button>
+
+    <div class="divider"></div>
+
+
+    <!-- LABS -->
+
+    <div class="section-label">
+        // SECURITY MODULES
     </div>
 
-    <div class="card">
-        <h2>API Input Validation</h2>
-        <p class="status">COMING NEXT</p>
-        <p>API validation, malformed input and secure error handling.</p>
+    <h2 class="section-title">
+        Interactive Labs
+    </h2>
 
-        <button class="disabled">
-            Coming Soon
-        </button>
+
+    <div class="grid">
+
+        <!-- XSS -->
+
+        <div class="card">
+
+            <span class="lab-code">
+                LAB_01 // XSS
+            </span>
+
+            <h3>
+                Cross-Site Scripting
+            </h3>
+
+            <p>
+                Compare unsafe HTML rendering with protected
+                text output and see how browser interpretation changes.
+            </p>
+
+            <a
+                class="open-button"
+                href="xss.html">
+                Open Lab
+            </a>
+
+        </div>
+
+
+        <!-- ACCESS CONTROL -->
+
+        <div class="card">
+
+            <span class="lab-code">
+                LAB_02 // IDOR
+            </span>
+
+            <h3>
+                Broken Access Control
+            </h3>
+
+            <p>
+                Demonstrate object-level authorization failures
+                and compare them with proper ownership validation.
+            </p>
+
+            <a
+                class="open-button"
+                href="access-control.html">
+                Open Lab
+            </a>
+
+        </div>
+
+
+        <!-- SQL -->
+
+        <div class="card">
+
+            <span class="lab-code">
+                LAB_03 // SQLi
+            </span>
+
+            <h3>
+                SQL Injection
+            </h3>
+
+            <p>
+                Compare unsafe SQL string construction with
+                parameterized query handling.
+            </p>
+
+            <a
+                class="open-button"
+                href="sql-injection.html">
+                Open Lab
+            </a>
+
+        </div>
+
+
+        <!-- API -->
+
+        <div class="card">
+
+            <span class="lab-code">
+                LAB_04 // API
+            </span>
+
+            <h3>
+                API Input Validation
+            </h3>
+
+            <p>
+                Test malformed and unexpected JSON input against
+                vulnerable and validated request handling.
+            </p>
+
+            <a
+                class="open-button"
+                href="api-validation.html">
+                Open Lab
+            </a>
+
+        </div>
+
     </div>
 
-</section>
 
-<footer>
-    Educational Security Testing Environment<br><br>
-    Dmytro Shmelov
-</footer>
+    <!-- FOOTER -->
+
+    <div class="footer">
+
+        <span>
+            Dmytro Shmelov — Web Security Portfolio
+        </span>
+
+        <span>
+            SYSTEM STATUS // SECURE
+        </span>
+
+    </div>
+
+</main>
 
 </body>
-</html><script>document.querySelectorAll('button.disabled').forEach(function(b,i){b.classList.remove('disabled');b.textContent='Open Lab';b.onclick=function(){location.href=['access-control.html','sql-injection.html','api-validation.html'][i];};});</script> 
+</html>

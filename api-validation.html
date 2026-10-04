@@ -2,180 +2,319 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>API Input Validation Lab</title>
+
 <style>
-body{margin:0;background:#0b0f14;color:#fff;font-family:Arial,sans-serif}
-main{max-width:850px;margin:auto;padding:35px 20px}
-a{color:#58a6ff}
-section{background:#151b23;border:1px solid #30363d;border-radius:12px;padding:24px;margin:20px 0}
-textarea{box-sizing:border-box;width:100%;min-height:170px;padding:14px;background:#0d1117;color:white;border:1px solid #484f58;border-radius:6px;font:16px monospace}
-button{background:#238636;color:white;border:0;border-radius:6px;padding:12px;margin:10px 5px 0 0;cursor:pointer;font-size:16px}
-pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#0d1117;padding:18px;border-radius:8px}
-p{line-height:1.6;color:#b8c0cc}
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #0d1117;
+    color: #e6edf3;
+}
+
+.container {
+    max-width: 900px;
+    margin: 50px auto;
+    padding: 25px;
+}
+
+a {
+    color: #58a6ff;
+    text-decoration: none;
+}
+
+h1 { font-size: 38px; }
+
+.subtitle { color: #9da7b3; }
+
+.lab {
+    margin-top: 30px;
+    padding: 28px;
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 12px;
+}
+
+textarea {
+    width: 100%;
+    height: 180px;
+    padding: 14px;
+    margin: 10px 0 20px;
+    background: #0d1117;
+    border: 1px solid #484f58;
+    border-radius: 6px;
+    color: white;
+    font-family: monospace;
+    font-size: 15px;
+}
+
+.buttons {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+button {
+    padding: 14px 24px;
+    border-radius: 7px;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+button.vulnerable {
+    background: #da3633 !important;
+    border: 2px solid #f85149 !important;
+    color: white !important;
+}
+
+button.protected {
+    background: #238636 !important;
+    border: 2px solid #3fb950 !important;
+    color: white !important;
+}
+
+button.example {
+    background: #30363d !important;
+    border: 2px solid #484f58 !important;
+    color: white !important;
+}
+
+.result {
+    margin-top: 25px;
+    padding: 20px;
+    min-height: 150px;
+    border-radius: 8px;
+    background: #0d1117;
+    white-space: pre-wrap;
+    font-family: monospace;
+}
+
+.result.bad {
+    background: #2d1215 !important;
+    border: 2px solid #f85149 !important;
+}
+
+.result.good {
+    background: #10261a !important;
+    border: 2px solid #3fb950 !important;
+}
+
+.info {
+    margin-top: 25px;
+    color: #9da7b3;
+    line-height: 1.6;
+}
 </style>
 </head>
-<body>
-<main>
-<a href="index.html">← Back to labs</a>
-<h1>API Input Validation</h1>
-<p>Local API simulation. No network requests or real records are created.</p>
 
-<section>
-<label for="payload">JSON request body:</label>
-<textarea id="payload" spellcheck="false">{
+<body>
+
+<div class="container">
+
+<a href="index.html">← Back to Security Lab</a>
+
+<h1>API Input Validation</h1>
+
+<p class="subtitle">
+Compare an API handler without validation with protected input validation.
+</p>
+
+<div class="lab">
+
+<label><strong>JSON Request Body</strong></label>
+
+<textarea id="jsonInput">{
   "name": "Alice",
   "age": 25,
   "email": "alice@example.com"
 }</textarea>
 
-<button id="send">Compare responses</button>
-<button id="invalid">Insert invalid data</button>
-<button id="tests">Run tests</button>
+<div class="buttons">
 
-<h2>Vulnerable handler</h2>
-<pre id="unsafe"></pre>
-<h2>Validated handler</h2>
-<pre id="safe" aria-live="polite"></pre>
-</section>
+<button class="vulnerable" onclick="runVulnerable()">
+🔓 Send Without Validation
+</button>
 
-<section>
-<h2>Validation rules</h2>
-<p>Name: 1–80 characters after trimming.
-Age: integer from 18 to 120.
-Email: a basic format check, maximum 254 characters.
-Unknown fields are rejected.</p>
-<p>Malformed JSON returns 400; invalid fields return 422.
-A real API must enforce these rules on the server.</p>
-</section>
-</main>
+<button class="protected" onclick="runProtected()">
+🛡 Send With Validation
+</button>
+
+<button class="example" onclick="insertInvalid()">
+Insert Invalid Data
+</button>
+
+</div>
+
+<div id="result" class="result">
+Choose Vulnerable or Protected to process the simulated API request.
+</div>
+
+</div>
+
+<div class="info">
+Protected validation checks the name, age, email and unexpected fields.
+This laboratory runs locally and does not send data to a real API.
+</div>
+
+</div>
 
 <script>
-function parseBody(raw) {
-  try {
-    return { ok: true, value: JSON.parse(raw) };
-  } catch {
-    return { ok: false };
-  }
+function insertInvalid() {
+
+    document.getElementById("jsonInput").value =
+`{
+  "name": "",
+  "age": -500,
+  "email": "not-an-email",
+  "admin": true
+}`;
 }
 
-function vulnerableHandler(raw) {
-  const parsed = parseBody(raw);
-  if (!parsed.ok) {
-    return { status: 400, body: { error: "Malformed JSON" } };
-  }
-  return {
-    status: 201,
-    body: { message: "Accepted without validation", data: parsed.value }
-  };
-}
+function runVulnerable() {
 
-function secureHandler(raw) {
-  if (raw.length > 4096) {
-    return { status: 413, body: { error: "Input too large for this demo" } };
-  }
-  const parsed = parseBody(raw);
-  if (!parsed.ok) {
-    return { status: 400, body: { error: "Malformed JSON" } };
-  }
+    const result =
+        document.getElementById("result");
 
-  const data = parsed.value;
-  if (data === null || typeof data !== "object" || Array.isArray(data)) {
-    return { status: 422, body: { error: "Expected a JSON object" } };
-  }
+    const input =
+        document.getElementById("jsonInput").value;
 
-  const errors = [];
-  const allowed = ["name", "age", "email"];
+    try {
 
-  if (Object.keys(data).some(function (key) {
-    return !allowed.includes(key);
-  })) {
-    errors.push("Unknown fields are not allowed");
-  }
+        const data = JSON.parse(input);
 
-  if (typeof data.name !== "string" ||
-      data.name.trim().length < 1 ||
-      data.name.trim().length > 80) {
-    errors.push("name must contain 1–80 characters");
-  }
+        result.className = "result bad";
 
-  if (!Number.isInteger(data.age) || data.age < 18 || data.age > 120) {
-    errors.push("age must be an integer from 18 to 120");
-  }
+        result.textContent =
+`🔴 VULNERABLE HANDLER
 
-  if (typeof data.email !== "string" ||
-      data.email.length > 254 ||
-      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) {
-    errors.push("email must have a valid basic format");
-  }
+SIMULATED HTTP 201 Created
 
-  if (errors.length) {
-    return { status: 422, body: { errors: errors } };
-  }
+REQUEST ACCEPTED WITHOUT VALIDATION
 
-  return {
-    status: 201,
-    body: {
-      message: "Validated successfully",
-      data: {
-        name: data.name.trim(),
-        age: data.age,
-        email: data.email
-      }
+${JSON.stringify(data, null, 2)}
+
+SECURITY ISSUE:
+
+Invalid and unexpected values were allowed
+to reach application logic.`;
+
+    } catch (error) {
+
+        result.className = "result bad";
+
+        result.textContent =
+`🔴 VULNERABLE HANDLER
+
+HTTP 400 Bad Request
+
+Malformed JSON.`;
     }
-  };
 }
 
-function show(response) {
-  return "SIMULATED HTTP " + response.status +
-    "\n" + JSON.stringify(response.body, null, 2);
+function runProtected() {
+
+    const result =
+        document.getElementById("result");
+
+    const input =
+        document.getElementById("jsonInput").value;
+
+    let data;
+
+    try {
+
+        data = JSON.parse(input);
+
+    } catch (error) {
+
+        result.className = "result good";
+
+        result.textContent =
+`🟢 PROTECTED HANDLER
+
+HTTP 400 Bad Request
+
+Malformed JSON rejected.`;
+
+        return;
+    }
+
+    const errors = [];
+
+    const allowedFields =
+        ["name", "age", "email"];
+
+    Object.keys(data).forEach(key => {
+
+        if (!allowedFields.includes(key)) {
+            errors.push(
+                "Unexpected field: " + key
+            );
+        }
+
+    });
+
+    if (
+        typeof data.name !== "string" ||
+        data.name.trim().length < 1 ||
+        data.name.trim().length > 80
+    ) {
+        errors.push("Invalid name");
+    }
+
+    if (
+        !Number.isInteger(data.age) ||
+        data.age < 18 ||
+        data.age > 120
+    ) {
+        errors.push(
+            "Age must be an integer from 18 to 120"
+        );
+    }
+
+    if (
+        typeof data.email !== "string" ||
+        !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)
+    ) {
+        errors.push("Invalid email");
+    }
+
+    result.className = "result good";
+
+    if (errors.length > 0) {
+
+        result.textContent =
+`🟢 PROTECTED HANDLER
+
+HTTP 422 Unprocessable Entity
+
+REQUEST BLOCKED
+
+${errors.map(error => "• " + error).join("\n")}
+
+Input validation successfully rejected
+the unsafe request.`;
+
+        return;
+    }
+
+    result.textContent =
+`🟢 PROTECTED HANDLER
+
+SIMULATED HTTP 201 Created
+
+VALIDATION PASSED
+
+${JSON.stringify(data, null, 2)}
+
+Request accepted after validation.`;
 }
-
-function compare() {
-  const raw = document.getElementById("payload").value;
-  document.getElementById("unsafe").textContent =
-    show(vulnerableHandler(raw));
-  document.getElementById("safe").textContent =
-    show(secureHandler(raw));
-}
-
-document.getElementById("send").onclick = compare;
-document.getElementById("invalid").onclick = function () {
-  document.getElementById("payload").value = JSON.stringify({
-    name: "",
-    age: -5,
-    email: "not-an-email",
-    role: "admin"
-  }, null, 2);
-  compare();
-};
-
-document.getElementById("tests").onclick = function () {
-  const valid = { name: "Alice", age: 25, email: "alice@example.com" };
-  const cases = [
-    ["Valid request", JSON.stringify(valid), 201],
-    ["Broken JSON", '{"name":', 400],
-    ["Wrong root type", "null", 422],
-    ["Array instead of object", "[]", 422],
-    ["Negative age", JSON.stringify({ ...valid, age: -1 }), 422],
-    ["Age as string", JSON.stringify({ ...valid, age: "25" }), 422],
-    ["Empty name", JSON.stringify({ ...valid, name: " " }), 422],
-    ["Invalid email", JSON.stringify({ ...valid, email: "abc" }), 422],
-    ["Unknown role field", JSON.stringify({ ...valid, role: "admin" }), 422],
-    ["Lower age boundary", JSON.stringify({ ...valid, age: 18 }), 201],
-    ["Upper age boundary", JSON.stringify({ ...valid, age: 120 }), 201],
-    ["Above age boundary", JSON.stringify({ ...valid, age: 121 }), 422],
-    ["Oversized input", " ".repeat(4097), 413]
-  ];
-  document.getElementById("safe").textContent =
-    cases.map(function (test) {
-      const actual = secureHandler(test[1]).status;
-      return (actual === test[2] ? "PASS" : "FAIL") +
-        " | " + test[0] + " | HTTP " + actual;
-    }).join("\n");
-};
-
-compare();
 </script>
+
 </body>
 </html>
