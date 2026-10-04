@@ -1,2 +1,9 @@
-# interactive-web-security-lab
-🇬🇧 Web security labs: XSS, broken access control, SQL injection and API input validation. Vulnerable and secure examples. 🇳🇴 Labs for websikkerhet: XSS, mangelfull tilgangskontroll, SQL-injeksjon og validering av API-inndata. Sårbare og sikre eksempler.
+## 🇬🇧 English
+
+Web security labs demonstrating **XSS**, **broken access control**, **SQL injection** and **API input validation** with vulnerable and secure examples.
+
+---
+
+## 🇳🇴 Norsk
+
+Labs for websikkerhet med **XSS**, **mangelfull tilgangskontroll**, **SQL-injeksjon** og **API-validering**, med sårbare og sikre eksempler.
