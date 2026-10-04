@@ -6,6 +6,8 @@
 <title>XSS Lab | Web Security Lab</title>
 
 <style>
+* { box-sizing: border-box; }
+
 body {
     margin: 0;
     font-family: Arial, sans-serif;
@@ -19,7 +21,9 @@ body {
     padding: 40px 20px;
 }
 
-a { color: #58a6ff; }
+a {
+    color: #58a6ff;
+}
 
 .lab {
     background: #151b23;
@@ -37,24 +41,57 @@ input {
     color: white;
     border-radius: 6px;
     margin: 10px 0;
+    font-size: 16px;
+}
+
+.buttons {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
 }
 
 button {
-    padding: 11px 18px;
-    border: 0;
-    border-radius: 6px;
+    padding: 14px 24px;
+    border-radius: 7px;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
     cursor: pointer;
-    margin-right: 8px;
 }
 
-.vulnerable {
-    background: #da3633;
-    color: white;
+button.vulnerable {
+    background: #da3633 !important;
+    border: 2px solid #f85149 !important;
+    color: #ffffff !important;
 }
 
-.safe {
-    background: #238636;
-    color: white;
+button.safe {
+    background: #238636 !important;
+    border: 2px solid #3fb950 !important;
+    color: #ffffff !important;
+}
+
+.status {
+    margin-top: 25px;
+    padding: 20px;
+    border-radius: 8px;
+    white-space: pre-wrap;
+    line-height: 1.5;
+    display: none;
+}
+
+.status.bad {
+    display: block;
+    background: #2d1215 !important;
+    border: 2px solid #f85149 !important;
+    color: #ffffff;
+}
+
+.status.good {
+    display: block;
+    background: #10261a !important;
+    border: 2px solid #3fb950 !important;
+    color: #ffffff;
 }
 
 .output {
@@ -62,18 +99,9 @@ button {
     border: 1px solid #30363d;
     padding: 18px;
     margin-top: 20px;
-    min-height: 40px;
+    min-height: 80px;
     border-radius: 6px;
-}
-
-.warning {
-    color: #ff7b72;
-    font-weight: bold;
-}
-
-.protected {
-    color: #3fb950;
-    font-weight: bold;
+    font-size: 17px;
 }
 </style>
 </head>
@@ -95,21 +123,25 @@ and a safer alternative.
 
 <h2>Test Input</h2>
 
-<input id="userInput"
-       value="<b>Security Test</b>"
-       placeholder="Enter test HTML">
+<input
+    id="userInput"
+    value="<b>Security Test</b>"
+    placeholder="Enter test HTML"
+>
 
-<br>
+<div class="buttons">
 
 <button class="vulnerable" onclick="runVulnerable()">
-Run Vulnerable
+🔓 Run Vulnerable
 </button>
 
 <button class="safe" onclick="runSafe()">
-Run Protected
+🛡 Run Protected
 </button>
 
-<div id="status"></div>
+</div>
+
+<div id="status" class="status"></div>
 
 <h3>Application Output</h3>
 
@@ -126,21 +158,43 @@ Waiting for test...
 function runVulnerable() {
 
     const input = document.getElementById("userInput").value;
+    const output = document.getElementById("output");
+    const status = document.getElementById("status");
 
-    document.getElementById("output").innerHTML = input;
+    output.innerHTML = input;
 
-    document.getElementById("status").innerHTML =
-        '<p class="warning">VULNERABLE: User input was interpreted as HTML.</p>';
+    status.className = "status bad";
+
+    status.textContent =
+`🔴 VULNERABLE — UNSAFE HTML RENDERING
+
+User input was interpreted as HTML.
+
+The application inserted untrusted input directly into the page using innerHTML.
+
+SECURITY ISSUE:
+HTML supplied by the user was rendered by the browser.`;
 }
 
 function runSafe() {
 
     const input = document.getElementById("userInput").value;
+    const output = document.getElementById("output");
+    const status = document.getElementById("status");
 
-    document.getElementById("output").textContent = input;
+    output.textContent = input;
 
-    document.getElementById("status").innerHTML =
-        '<p class="protected">PROTECTED: User input was rendered as text.</p>';
+    status.className = "status good";
+
+    status.textContent =
+`🟢 PROTECTED — SAFE TEXT RENDERING
+
+User input was rendered as text.
+
+The application treated the supplied value as data instead of HTML.
+
+PROTECTION:
+The browser did not interpret the user input as HTML.`;
 }
 
 </script>
