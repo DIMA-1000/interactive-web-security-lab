@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SQL Injection Lab</title>
+<style>
+body{margin:0;background:#0b0f14;color:#fff;font-family:Arial,sans-serif}
+main{max-width:850px;margin:auto;padding:35px 20px}
+a{color:#58a6ff}
+section{background:#151b23;border:1px solid #30363d;border-radius:12px;padding:24px;margin:20px 0}
+input{box-sizing:border-box;width:100%;padding:12px;background:#0d1117;color:white;border:1px solid #484f58;border-radius:6px;font-size:16px}
+button{background:#238636;color:white;border:0;border-radius:6px;padding:12px;margin:10px 5px 0 0;cursor:pointer;font-size:16px}
+pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#0d1117;padding:18px;border-radius:8px}
+p{line-height:1.6;color:#b8c0cc}
+</style>
+</head>
+<body>
+<main>
+<a href="index.html">← Back to labs</a>
+<h1>SQL Injection</h1>
+<p>Query-building demonstration. No database or real SQL engine is
+used. Only the illustrated attack example is simulated.</p>
+
+<section>
+<label for="username">Username:</label>
+<input id="username" value="alice" autocomplete="off">
+<button id="compare">Compare queries</button>
+<button id="example">Insert attack example</button>
+<button id="tests">Run tests</button>
+
+<h2>Vulnerable: string concatenation</h2>
+<pre id="unsafe"></pre>
+
+<h2>Secure: parameter binding</h2>
+<pre id="safe"></pre>
+
+<h2>Simulated result</h2>
+<pre id="result" aria-live="polite"></pre>
+</section>
+
+<section>
+<h2>Why parameters matter</h2>
+<p>Concatenation puts input into SQL syntax. With genuine database
+parameter binding, the query and values are sent separately.
+The input remains a value, even when it contains SQL characters.</p>
+<p>In a real backend, use the database driver's parameter API.
+Displaying a question mark alone does not make a query secure.</p>
+</section>
+</main>
+
+<script>
+const users = [
+  { id: 1, username: "alice" },
+  { id: 2, username: "bob" }
+];
+const attack = "' OR 1=1 --";
+
+function unsafeQuery(value) {
+  return "SELECT id, username FROM users WHERE username = '" +
+    value + "'";
+}
+
+function boundQuery(value) {
+  return {
+    sql: "SELECT id, username FROM users WHERE username = ?",
+    parameters: [value]
+  };
+}
+
+function simulateUnsafe(value) {
+  // Teaching model for this one example, not a SQL interpreter.
+  if (value.trim() === attack) return users;
+  return users.filter(function (user) {
+    return user.username === value;
+  });
+}
+
+function simulateBound(value) {
+  return users.filter(function (user) {
+    return user.username === value;
+  });
+}
+
+function compare() {
+  const value = document.getElementById("username").value;
+  document.getElementById("unsafe").textContent = unsafeQuery(value);
+  document.getElementById("safe").textContent =
+    JSON.stringify(boundQuery(value), null, 2);
+  document.getElementById("result").textContent =
+    "Vulnerable model:\n" +
+    JSON.stringify(simulateUnsafe(value), null, 2) +
+    "\n\nParameterized model:\n" +
+    JSON.stringify(simulateBound(value), null, 2);
+}
+
+document.getElementById("compare").onclick = compare;
+document.getElementById("example").onclick = function () {
+  document.getElementById("username").value = attack;
+  compare();
+};
+
+document.getElementById("tests").onclick = function () {
+  const cases = [
+    ["Normal username", "alice", 1, 1],
+    ["Unknown username", "nobody", 0, 0],
+    ["Illustrated injection", attack, 2, 0],
+    ["Quote treated as data in bound model", "O'Brien", 0, 0]
+  ];
+  document.getElementById("result").textContent =
+    cases.map(function (test) {
+      const unsafeCount = simulateUnsafe(test[1]).length;
+      const safeCount = simulateBound(test[1]).length;
+      const pass = unsafeCount === test[2] && safeCount === test[3];
+      return (pass ? "PASS" : "FAIL") + " | " + test[0] +
+        " | vulnerable: " + unsafeCount + ", bound: " + safeCount;
+    }).join("\n");
+};
+
+compare();
+</script>
+</body>
+</html>

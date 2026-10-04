@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Dmytro Shmelov | Interactive Web Security Lab</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #0b0f14;
+            color: white;
+        }
+
+        header {
+            text-align: center;
+            padding: 70px 20px 40px;
+        }
+
+        h1 {
+            font-size: 42px;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            color: #9ca3af;
+            font-size: 18px;
+        }
+
+        .name {
+            color: white;
+            font-weight: bold;
+        }
+
+        .labs {
+            max-width: 900px;
+            margin: auto;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: #151b23;
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            padding: 25px;
+        }
+
+        .card h2 {
+            margin-top: 0;
+        }
+
+        .status {
+            color: #ff5c5c;
+            font-weight: bold;
+        }
+
+        button {
+            background: #238636;
+            color: white;
+            border: 0;
+            border-radius: 6px;
+            padding: 11px 18px;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        button:hover {
+            background: #2ea043;
+        }
+
+        .disabled {
+            background: #30363d;
+            cursor: default;
+        }
+
+        .disabled:hover {
+            background: #30363d;
+        }
+
+        footer {
+            text-align: center;
+            color: #8b949e;
+            padding: 50px 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>Interactive Web Security Lab</h1>
+    <p>Practical Web & API Security Testing</p>
+    <p class="name">Dmytro Shmelov</p>
+</header>
+
+<section class="labs">
+
+    <div class="card">
+        <h2>Cross-Site Scripting (XSS)</h2>
+        <p class="status">VULNERABLE LAB</p>
+        <p>Interactive demonstration of unsafe HTML rendering and its secure alternative.</p>
+
+        <button onclick="window.location.href='xss.html'">
+            Open Lab
+        </button>
+    </div>
+
+    <div class="card">
+        <h2>Broken Access Control</h2>
+        <p class="status">COMING NEXT</p>
+        <p>Authorization and object-level access control demonstration.</p>
+
+        <button class="disabled">
+            Coming Soon
+        </button>
+    </div>
+
+    <div class="card">
+        <h2>SQL Injection</h2>
+        <p class="status">COMING NEXT</p>
+        <p>Vulnerable database query versus parameterized query.</p>
+
+        <button class="disabled">
+            Coming Soon
+        </button>
+    </div>
+
+    <div class="card">
+        <h2>API Input Validation</h2>
+        <p class="status">COMING NEXT</p>
+        <p>API validation, malformed input and secure error handling.</p>
+
+        <button class="disabled">
+            Coming Soon
+        </button>
+    </div>
+
+</section>
+
+<footer>
+    Educational Security Testing Environment<br><br>
+    Dmytro Shmelov
+</footer>
+
+</body>
+</html><script>document.querySelectorAll('button.disabled').forEach(function(b,i){b.classList.remove('disabled');b.textContent='Open Lab';b.onclick=function(){location.href=['access-control.html','sql-injection.html','api-validation.html'][i];};});</script> 

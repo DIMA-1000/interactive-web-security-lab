@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>XSS Lab | Web Security Lab</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #0b0f14;
+    color: white;
+}
+
+.container {
+    max-width: 900px;
+    margin: auto;
+    padding: 40px 20px;
+}
+
+a { color: #58a6ff; }
+
+.lab {
+    background: #151b23;
+    border: 1px solid #30363d;
+    border-radius: 12px;
+    padding: 25px;
+    margin-top: 25px;
+}
+
+input {
+    width: 95%;
+    padding: 12px;
+    background: #0d1117;
+    border: 1px solid #30363d;
+    color: white;
+    border-radius: 6px;
+    margin: 10px 0;
+}
+
+button {
+    padding: 11px 18px;
+    border: 0;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-right: 8px;
+}
+
+.vulnerable {
+    background: #da3633;
+    color: white;
+}
+
+.safe {
+    background: #238636;
+    color: white;
+}
+
+.output {
+    background: #0d1117;
+    border: 1px solid #30363d;
+    padding: 18px;
+    margin-top: 20px;
+    min-height: 40px;
+    border-radius: 6px;
+}
+
+.warning {
+    color: #ff7b72;
+    font-weight: bold;
+}
+
+.protected {
+    color: #3fb950;
+    font-weight: bold;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<a href="index.html">← Back to Security Lab</a>
+
+<h1>Cross-Site Scripting (XSS)</h1>
+
+<p>
+Interactive demonstration of unsafe HTML rendering
+and a safer alternative.
+</p>
+
+<div class="lab">
+
+<h2>Test Input</h2>
+
+<input id="userInput"
+       value="<b>Security Test</b>"
+       placeholder="Enter test HTML">
+
+<br>
+
+<button class="vulnerable" onclick="runVulnerable()">
+Run Vulnerable
+</button>
+
+<button class="safe" onclick="runSafe()">
+Run Protected
+</button>
+
+<div id="status"></div>
+
+<h3>Application Output</h3>
+
+<div id="output" class="output">
+Waiting for test...
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+function runVulnerable() {
+
+    const input = document.getElementById("userInput").value;
+
+    document.getElementById("output").innerHTML = input;
+
+    document.getElementById("status").innerHTML =
+        '<p class="warning">VULNERABLE: User input was interpreted as HTML.</p>';
+}
+
+function runSafe() {
+
+    const input = document.getElementById("userInput").value;
+
+    document.getElementById("output").textContent = input;
+
+    document.getElementById("status").innerHTML =
+        '<p class="protected">PROTECTED: User input was rendered as text.</p>';
+}
+
+</script>
+
+</body>
+</html>

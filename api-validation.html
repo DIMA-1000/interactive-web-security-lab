@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>API Input Validation Lab</title>
+<style>
+body{margin:0;background:#0b0f14;color:#fff;font-family:Arial,sans-serif}
+main{max-width:850px;margin:auto;padding:35px 20px}
+a{color:#58a6ff}
+section{background:#151b23;border:1px solid #30363d;border-radius:12px;padding:24px;margin:20px 0}
+textarea{box-sizing:border-box;width:100%;min-height:170px;padding:14px;background:#0d1117;color:white;border:1px solid #484f58;border-radius:6px;font:16px monospace}
+button{background:#238636;color:white;border:0;border-radius:6px;padding:12px;margin:10px 5px 0 0;cursor:pointer;font-size:16px}
+pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#0d1117;padding:18px;border-radius:8px}
+p{line-height:1.6;color:#b8c0cc}
+</style>
+</head>
+<body>
+<main>
+<a href="index.html">← Back to labs</a>
+<h1>API Input Validation</h1>
+<p>Local API simulation. No network requests or real records are created.</p>
+
+<section>
+<label for="payload">JSON request body:</label>
+<textarea id="payload" spellcheck="false">{
+  "name": "Alice",
+  "age": 25,
+  "email": "alice@example.com"
+}</textarea>
+
+<button id="send">Compare responses</button>
+<button id="invalid">Insert invalid data</button>
+<button id="tests">Run tests</button>
+
+<h2>Vulnerable handler</h2>
+<pre id="unsafe"></pre>
+<h2>Validated handler</h2>
+<pre id="safe" aria-live="polite"></pre>
+</section>
+
+<section>
+<h2>Validation rules</h2>
+<p>Name: 1–80 characters after trimming.
+Age: integer from 18 to 120.
+Email: a basic format check, maximum 254 characters.
+Unknown fields are rejected.</p>
+<p>Malformed JSON returns 400; invalid fields return 422.
+A real API must enforce these rules on the server.</p>
+</section>
+</main>
+
+<script>
+function parseBody(raw) {
+  try {
+    return { ok: true, value: JSON.parse(raw) };
+  } catch {
+    return { ok: false };
+  }
+}
+
+function vulnerableHandler(raw) {
+  const parsed = parseBody(raw);
+  if (!parsed.ok) {
+    return { status: 400, body: { error: "Malformed JSON" } };
+  }
+  return {
+    status: 201,
+    body: { message: "Accepted without validation", data: parsed.value }
+  };
+}
+
+function secureHandler(raw) {
+  if (raw.length > 4096) {
+    return { status: 413, body: { error: "Input too large for this demo" } };
+  }
+  const parsed = parseBody(raw);
+  if (!parsed.ok) {
+    return { status: 400, body: { error: "Malformed JSON" } };
+  }
+
+  const data = parsed.value;
+  if (data === null || typeof data !== "object" || Array.isArray(data)) {
+    return { status: 422, body: { error: "Expected a JSON object" } };
+  }
+
+  const errors = [];
+  const allowed = ["name", "age", "email"];
+
+  if (Object.keys(data).some(function (key) {
+    return !allowed.includes(key);
+  })) {
+    errors.push("Unknown fields are not allowed");
+  }
+
+  if (typeof data.name !== "string" ||
+      data.name.trim().length < 1 ||
+      data.name.trim().length > 80) {
+    errors.push("name must contain 1–80 characters");
+  }
+
+  if (!Number.isInteger(data.age) || data.age < 18 || data.age > 120) {
+    errors.push("age must be an integer from 18 to 120");
+  }
+
+  if (typeof data.email !== "string" ||
+      data.email.length > 254 ||
+      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) {
+    errors.push("email must have a valid basic format");
+  }
+
+  if (errors.length) {
+    return { status: 422, body: { errors: errors } };
+  }
+
+  return {
+    status: 201,
+    body: {
+      message: "Validated successfully",
+      data: {
+        name: data.name.trim(),
+        age: data.age,
+        email: data.email
+      }
+    }
+  };
+}
+
+function show(response) {
+  return "SIMULATED HTTP " + response.status +
+    "\n" + JSON.stringify(response.body, null, 2);
+}
+
+function compare() {
+  const raw = document.getElementById("payload").value;
+  document.getElementById("unsafe").textContent =
+    show(vulnerableHandler(raw));
+  document.getElementById("safe").textContent =
+    show(secureHandler(raw));
+}
+
+document.getElementById("send").onclick = compare;
+document.getElementById("invalid").onclick = function () {
+  document.getElementById("payload").value = JSON.stringify({
+    name: "",
+    age: -5,
+    email: "not-an-email",
+    role: "admin"
+  }, null, 2);
+  compare();
+};
+
+document.getElementById("tests").onclick = function () {
+  const valid = { name: "Alice", age: 25, email: "alice@example.com" };
+  const cases = [
+    ["Valid request", JSON.stringify(valid), 201],
+    ["Broken JSON", '{"name":', 400],
+    ["Wrong root type", "null", 422],
+    ["Array instead of object", "[]", 422],
+    ["Negative age", JSON.stringify({ ...valid, age: -1 }), 422],
+    ["Age as string", JSON.stringify({ ...valid, age: "25" }), 422],
+    ["Empty name", JSON.stringify({ ...valid, name: " " }), 422],
+    ["Invalid email", JSON.stringify({ ...valid, email: "abc" }), 422],
+    ["Unknown role field", JSON.stringify({ ...valid, role: "admin" }), 422],
+    ["Lower age boundary", JSON.stringify({ ...valid, age: 18 }), 201],
+    ["Upper age boundary", JSON.stringify({ ...valid, age: 120 }), 201],
+    ["Above age boundary", JSON.stringify({ ...valid, age: 121 }), 422],
+    ["Oversized input", " ".repeat(4097), 413]
+  ];
+  document.getElementById("safe").textContent =
+    cases.map(function (test) {
+      const actual = secureHandler(test[1]).status;
+      return (actual === test[2] ? "PASS" : "FAIL") +
+        " | " + test[0] + " | HTTP " + actual;
+    }).join("\n");
+};
+
+compare();
+</script>
+</body>
+</html>
