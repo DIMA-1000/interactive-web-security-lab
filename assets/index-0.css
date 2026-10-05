@@ -1332,3 +1332,17 @@ body.hardened .hardening-panel{max-height:900px}
 .github-footer{color:#8fced8;text-decoration:none;display:inline-flex;align-items:center;min-height:44px;font-size:16px}
 @media(max-width:480px){.github-projects{font-size:15px;padding:11px 14px}}
 @media(prefers-reduced-motion:reduce){.github-projects{transition:none}}
+
+/* Compact, understated project links. App destination will be added later. */
+.hero-projects{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:16px}
+.github-projects{min-height:44px;padding:7px 10px;gap:8px;background:transparent;border:1px solid rgba(125,170,185,.1);border-radius:3px;font:500 15px/1.4 system-ui,sans-serif;letter-spacing:0;color:#aebbc6;box-shadow:none}
+.github-icon{width:20px;height:20px}
+.app-projects:disabled{opacity:1;cursor:default;color:#87949f}
+@media(hover:hover){.github-projects:not(:disabled):hover{color:#ecf6fa;border-color:rgba(125,170,185,.24);box-shadow:none}}
+@media(max-width:480px){.github-projects{font-size:15px;padding:7px 10px}}
+
+.application-icon{width:32px;height:26px;flex:none;overflow:visible}
+.application-icon .app-orbit{fill:none;stroke:#368dd6;stroke-width:.7;stroke-dasharray:1.5 3;opacity:.5}
+.application-icon .app-blue{fill:#349aec}.application-icon .app-cyan{fill:#42cddd}.application-icon .app-green{fill:#70cf8e}
+
+.application-icon{width:32px;height:32px;object-fit:contain;border-radius:7px;flex:none}

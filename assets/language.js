@@ -1,5 +1,6 @@
 const NORWEGIAN = {
-  "VIEW MY PROJECTS": "SE PROSJEKTENE MINE",
+  "My GitHub": "Min GitHub",
+  "My Application": "Min applikasjon",
   "← Back to Security Lab": "← Tilbake til sikkerhetslaboratoriet",
   "API Input Validation Lab": "Laboratorium for validering av API-inndata",
   "API Input Validation": "Validering av API-inndata",
