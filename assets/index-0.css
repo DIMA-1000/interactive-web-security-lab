@@ -1312,3 +1312,23 @@ body.hardened .hardening-panel{max-height:900px}
 .audit-image-pulses .p1,.audit-image-pulses .p3{stroke:#32bfff}
 .audit-card .lab-tooltip{font-size:clamp(17px,1.35vw,19px)}
 @media(prefers-reduced-motion:reduce){.card-circuit .audit-pulse,.audit-image-pulses .audit-pulse{animation:none;stroke-dasharray:none;opacity:.15}}
+
+/* Lab cards are static by default; only the dedicated audit artwork moves. */
+.card-circuit .audit-pulse{animation:none;stroke-dasharray:none;opacity:.35;filter:none}
+.card-circuit .audit-node{filter:none}
+
+/* Security status belongs to the hero, away from the fixed offline notice. */
+.hero-security-status{position:relative;margin-top:18px;text-align:left;max-width:100%;padding-bottom:40px}
+.hero-security-status > .status{display:block;font-size:clamp(14px,1.2vw,16px);overflow-wrap:anywhere}
+.hero-security-status .security-toast{position:absolute;left:0;right:auto;top:28px;bottom:auto;max-width:100%;box-sizing:border-box;transform:translateY(5px);font-size:14px;letter-spacing:.025em;padding:7px 10px;overflow-wrap:anywhere}
+.hero-security-status .security-toast.show{transform:translateY(0)}
+
+/* Quiet, touch-friendly link to the complete GitHub profile. */
+.hero-projects{margin-top:22px}
+.github-projects{display:inline-flex;align-items:center;gap:11px;min-height:48px;box-sizing:border-box;max-width:100%;padding:12px 18px;border:1px solid #327b8a;border-radius:4px;background:#08151d;color:#f0f8fc;font:700 16px/1.4 "Courier New",monospace;letter-spacing:.035em;text-decoration:none;transition:border-color .2s,box-shadow .2s}
+.github-icon{width:23px;height:23px;flex:none;fill:currentColor}
+.github-projects:focus-visible,.github-footer:focus-visible{outline:2px solid var(--green);outline-offset:4px}
+@media(hover:hover){.github-projects:hover{border-color:#55ddea;box-shadow:0 0 14px #36a9ff26}}
+.github-footer{color:#8fced8;text-decoration:none;display:inline-flex;align-items:center;min-height:44px;font-size:16px}
+@media(max-width:480px){.github-projects{font-size:15px;padding:11px 14px}}
+@media(prefers-reduced-motion:reduce){.github-projects{transition:none}}
