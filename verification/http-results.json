@@ -1,0 +1,78 @@
+[
+  {
+    "file": "index.html",
+    "status": 200
+  },
+  {
+    "file": "xss.html",
+    "status": 200
+  },
+  {
+    "file": "access-control.html",
+    "status": 200
+  },
+  {
+    "file": "api-validation.html",
+    "status": 200
+  },
+  {
+    "file": "security-audit.html",
+    "status": 200
+  },
+  {
+    "file": "sql-injection.html",
+    "status": 200
+  },
+  {
+    "file": "assets/access-control-0.css",
+    "status": 200
+  },
+  {
+    "file": "assets/xss-0.js",
+    "status": 200
+  },
+  {
+    "file": "assets/access-control-0.js",
+    "status": 200
+  },
+  {
+    "file": "assets/xss-0.css",
+    "status": 200
+  },
+  {
+    "file": "assets/sql-injection-0.js",
+    "status": 200
+  },
+  {
+    "file": "assets/api-validation-0.js",
+    "status": 200
+  },
+  {
+    "file": "assets/index-0.js",
+    "status": 200
+  },
+  {
+    "file": "assets/api-validation-0.css",
+    "status": 200
+  },
+  {
+    "file": "assets/security-audit.css",
+    "status": 200
+  },
+  {
+    "file": "assets/sql-injection-0.css",
+    "status": 200
+  },
+  {
+    "file": "assets/index-0.css",
+    "status": 200
+  },
+  {
+    "file": "banner.png",
+    "status": 200
+  },
+  {
+    "file": "favicon.png",
+    "status": 200
+  }
+]

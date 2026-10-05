@@ -1,109 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; script-src-attr 'none'; style-src 'self'; img-src 'self'; font-src 'none'; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-src 'self'; worker-src 'self'">
+<meta name="referrer" content="no-referrer">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SQL Injection Lab</title>
 
-<style>
-* { box-sizing: border-box; }
-
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: #0d1117;
-    color: #e6edf3;
-}
-
-.container {
-    max-width: 900px;
-    margin: 50px auto;
-    padding: 25px;
-}
-
-a {
-    color: #58a6ff;
-    text-decoration: none;
-}
-
-h1 { font-size: 38px; }
-.subtitle { color: #9da7b3; }
-
-.lab {
-    margin-top: 30px;
-    padding: 28px;
-    background: #161b22;
-    border: 1px solid #30363d;
-    border-radius: 12px;
-}
-
-input {
-    width: 100%;
-    padding: 14px;
-    margin: 10px 0 20px;
-    background: #0d1117;
-    border: 1px solid #484f58;
-    border-radius: 6px;
-    color: white;
-    font-size: 16px;
-}
-
-.buttons {
-    display: flex;
-    gap: 15px;
-    flex-wrap: wrap;
-}
-
-button {
-    padding: 14px 24px;
-    border-radius: 7px;
-    color: white;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-button.vulnerable {
-    background: #da3633 !important;
-    border: 2px solid #f85149 !important;
-}
-
-button.protected {
-    background: #238636 !important;
-    border: 2px solid #3fb950 !important;
-}
-
-button.example {
-    background: #30363d !important;
-    border: 2px solid #484f58 !important;
-}
-
-.result {
-    margin-top: 25px;
-    padding: 20px;
-    min-height: 150px;
-    background: #0d1117;
-    border-radius: 8px;
-    white-space: pre-wrap;
-    font-family: monospace;
-}
-
-.result.bad {
-    background: #2d1215 !important;
-    border: 2px solid #f85149 !important;
-}
-
-.result.good {
-    background: #10261a !important;
-    border: 2px solid #3fb950 !important;
-}
-
-.info {
-    margin-top: 25px;
-    color: #9da7b3;
-    line-height: 1.6;
-}
-</style>
+<link rel="stylesheet" href="assets/sql-injection-0.css">
+<link rel="stylesheet" href="assets/offline.css">
+<script src="assets/offline.js" defer></script>
+<script src="assets/language.js" defer></script>
 </head>
 
 <body>
@@ -135,15 +42,15 @@ Enter a username or use the test example to compare query construction.
 
 <div class="buttons">
 
-<button type="button" class="vulnerable" onclick="runVulnerable()">
+<button type="button" class="vulnerable" id="action-0">
 🔓 Run Vulnerable
 </button>
 
-<button type="button" class="protected" onclick="runProtected()">
+<button type="button" class="protected" id="action-1">
 🛡 Run Protected
 </button>
 
-<button type="button" class="example" onclick="insertExample()">
+<button type="button" class="example" id="action-2">
 Insert Test Example
 </button>
 
@@ -163,65 +70,7 @@ does not become part of the SQL syntax.
 
 </div>
 
-<script>
-function insertExample() {
-    document.getElementById("username").value =
-        "alice' OR '1'='1";
-}
-
-function runVulnerable() {
-    const value = document.getElementById("username").value;
-    const result = document.getElementById("result");
-
-    const query =
-        "SELECT id, username FROM users WHERE username = '" +
-        value +
-        "'";
-
-    result.className = "result bad";
-
-    result.textContent =
-`🔴 VULNERABLE — STRING CONCATENATION
-
-Generated SQL:
-
-${query}
-
-SECURITY ISSUE:
-
-User-controlled input was inserted directly
-into the SQL statement.
-
-SQL syntax and user data are not safely separated.`;
-}
-
-function runProtected() {
-    const value = document.getElementById("username").value;
-    const result = document.getElementById("result");
-
-    result.className = "result good";
-
-    result.textContent =
-`🟢 PROTECTED — PARAMETERIZED QUERY
-
-SQL:
-
-SELECT id, username
-FROM users
-WHERE username = ?
-
-Parameter:
-
-${JSON.stringify(value)}
-
-SECURE BEHAVIOR:
-
-The SQL structure remains unchanged.
-
-User input is handled as data,
-not executable SQL syntax.`;
-}
-</script>
+<script src="assets/sql-injection-0.js" defer></script>
 
 </body>
 </html>

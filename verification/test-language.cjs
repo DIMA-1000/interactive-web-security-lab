@@ -1,0 +1,10 @@
+const fs=require('fs'),vm=require('vm'),assert=require('assert');let now=1000,stored={},timers=[],handlers={};
+const thanks={setAttribute(){},addEventListener:(name,fn)=>handlers[name]=fn};
+const text={data:'Interactive Labs',parentElement:{closest:()=>null}};
+const doc={documentElement:{lang:'en'},querySelector:()=>thanks,querySelectorAll:()=>[],createTreeWalker:()=>{let read=false;return {nextNode:()=>read?null:(read=true,text)}},addEventListener(){}};
+const context={document:doc,NodeFilter:{SHOW_TEXT:4},MutationObserver:class{disconnect(){}observe(){}},localStorage:{getItem:k=>stored[k],setItem:(k,v)=>stored[k]=v,removeItem:k=>delete stored[k]},window:{addEventListener(){}},Date:{now:()=>now},setTimeout:(fn,ms)=>{timers.push({fn,ms});return timers.length},clearTimeout(){}};
+vm.runInNewContext(fs.readFileSync('offline-work/Interactive-Web-Security-Lab/assets/language.js','utf8'),context);
+for(let i=0;i<3;i++)handlers.click();assert.equal(doc.documentElement.lang,'nb');assert.equal(text.data,'Interaktive laboratorier');assert.equal(Number(stored['iwsl-norwegian-until']),301000);
+for(let i=0;i<3;i++)handlers.click();assert.equal(doc.documentElement.lang,'en');assert.equal(text.data,'Interactive Labs');
+for(let i=0;i<3;i++)handlers.click();now=302000;timers.at(-1).fn();assert.equal(doc.documentElement.lang,'en');assert.equal(text.data,'Interactive Labs');
+console.log('PASS: triple click enables Norwegian, triple click restores English, five-minute expiry restores original text. DOM model only.');

@@ -1,0 +1,7 @@
+{
+  "tests": [
+    "Complete install, activation, offline pages and origin scope pass",
+    "Interrupted/mismatched install retains old cache"
+  ],
+  "browserValidated": false
+}

@@ -1,0 +1,95 @@
+
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #0d1117;
+    color: #e6edf3;
+}
+
+.container {
+    max-width: 900px;
+    margin: 50px auto;
+    padding: 25px;
+}
+
+a {
+    color: #58a6ff;
+    text-decoration: none;
+}
+
+h1 { font-size: 38px; }
+
+.subtitle { color: #9da7b3; }
+
+.lab {
+    margin-top: 30px;
+    padding: 28px;
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 12px;
+}
+
+input {
+    width: 100%;
+    padding: 14px;
+    margin: 10px 0 20px;
+    background: #0d1117;
+    border: 1px solid #484f58;
+    border-radius: 6px;
+    color: white;
+    font-size: 16px;
+}
+
+.buttons {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+button {
+    padding: 14px 24px;
+    border-radius: 7px;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+button.vulnerable {
+    background: #da3633 !important;
+    border: 2px solid #f85149 !important;
+    color: #ffffff !important;
+}
+
+button.protected {
+    background: #238636 !important;
+    border: 2px solid #3fb950 !important;
+    color: #ffffff !important;
+}
+
+.result {
+    margin-top: 25px;
+    padding: 20px;
+    min-height: 120px;
+    background: #0d1117;
+    border-radius: 8px;
+    white-space: pre-wrap;
+}
+
+.result.bad {
+    background: #2d1215 !important;
+    border: 2px solid #f85149 !important;
+}
+
+.result.good {
+    background: #10261a !important;
+    border: 2px solid #3fb950 !important;
+}
+
+.info {
+    margin-top: 25px;
+    color: #9da7b3;
+    line-height: 1.6;
+}

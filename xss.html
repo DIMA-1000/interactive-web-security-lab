@@ -1,115 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; script-src-attr 'none'; style-src 'self'; img-src 'self'; font-src 'none'; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-src 'self'; worker-src 'self'">
+<meta name="referrer" content="no-referrer">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>XSS Lab | Web Security Lab</title>
 
-<style>
-* { box-sizing: border-box; }
-
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: #0b0f14;
-    color: white;
-}
-
-.container {
-    max-width: 900px;
-    margin: auto;
-    padding: 40px 20px;
-}
-
-a { color: #58a6ff; }
-
-.lab {
-    background: #151b23;
-    border: 1px solid #30363d;
-    border-radius: 12px;
-    padding: 25px;
-    margin-top: 25px;
-}
-
-input {
-    width: 95%;
-    padding: 12px;
-    background: #0d1117;
-    border: 1px solid #30363d;
-    color: white;
-    border-radius: 6px;
-    margin: 10px 0;
-    font-size: 16px;
-}
-
-.buttons {
-    display: flex;
-    gap: 15px;
-    flex-wrap: wrap;
-}
-
-button {
-    padding: 14px 24px;
-    border-radius: 7px;
-    color: white;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-button.vulnerable {
-    background: #da3633 !important;
-    border: 2px solid #f85149 !important;
-    color: #ffffff !important;
-}
-
-button.safe {
-    background: #238636 !important;
-    border: 2px solid #3fb950 !important;
-    color: #ffffff !important;
-}
-
-.status {
-    margin-top: 25px;
-    padding: 20px;
-    border-radius: 8px;
-    white-space: pre-wrap;
-    line-height: 1.5;
-    display: none;
-}
-
-.status.bad {
-    display: block;
-    background: #2d1215 !important;
-    border: 2px solid #f85149 !important;
-    color: #ffffff;
-}
-
-.status.good {
-    display: block;
-    background: #10261a !important;
-    border: 2px solid #3fb950 !important;
-    color: #ffffff;
-}
-
-.output {
-    background: #0d1117;
-    border: 1px solid #30363d;
-    padding: 18px;
-    margin-top: 20px;
-    min-height: 80px;
-    border-radius: 6px;
-    font-size: 17px;
-}
-
-.output-frame {
-    width: 100%;
-    min-height: 90px;
-    border: 0;
-    background: #0d1117;
-    color-scheme: dark;
-}
-</style>
+<link rel="stylesheet" href="assets/xss-0.css">
+<link rel="stylesheet" href="assets/offline.css">
+<script src="assets/offline.js" defer></script>
+<script src="assets/language.js" defer></script>
 </head>
 
 <body>
@@ -146,11 +47,11 @@ The vulnerable example renders the supplied HTML inside an isolated sandbox.
 
 <div class="buttons">
 
-<button type="button" class="vulnerable" onclick="runVulnerable()">
+<button type="button" class="vulnerable" id="action-0">
 🔓 Run Vulnerable
 </button>
 
-<button type="button" class="safe" onclick="runSafe()">
+<button type="button" class="safe" id="action-1">
 🛡 Run Protected
 </button>
 
@@ -168,59 +69,7 @@ Waiting for test...
 
 </div>
 
-<script>
-function runVulnerable() {
-    const input = document.getElementById("userInput").value;
-    const output = document.getElementById("output");
-    const status = document.getElementById("status");
-
-    /*
-      Intentionally unsafe rendering is confined to a sandboxed iframe.
-      No allow-scripts and no allow-same-origin are granted, so injected
-      script/event-handler code cannot execute in the parent page context.
-    */
-    const frame = document.createElement("iframe");
-    frame.className = "output-frame";
-    frame.setAttribute("sandbox", "");
-    frame.setAttribute("title", "Isolated vulnerable HTML rendering output");
-    frame.srcdoc = input;
-
-    output.replaceChildren(frame);
-
-    status.className = "status bad";
-    status.textContent =
-`🔴 VULNERABLE — UNSAFE HTML RENDERING
-
-User input was interpreted as HTML inside an isolated sandbox.
-
-The vulnerable example treats untrusted input as HTML.
-
-SECURITY ISSUE:
-HTML supplied by the user is rendered by the browser.
-
-ISOLATION:
-The rendered content is separated from the parent application context.`;
-}
-
-function runSafe() {
-    const input = document.getElementById("userInput").value;
-    const output = document.getElementById("output");
-    const status = document.getElementById("status");
-
-    output.textContent = input;
-
-    status.className = "status good";
-    status.textContent =
-`🟢 PROTECTED — SAFE TEXT RENDERING
-
-User input was rendered as text.
-
-The application treated the supplied value as data instead of HTML.
-
-PROTECTION:
-The browser did not interpret the user input as HTML.`;
-}
-</script>
+<script src="assets/xss-0.js" defer></script>
 
 </body>
 </html>

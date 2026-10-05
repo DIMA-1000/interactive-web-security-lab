@@ -1,106 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; script-src-attr 'none'; style-src 'self'; img-src 'self'; font-src 'none'; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-src 'self'; worker-src 'self'">
+<meta name="referrer" content="no-referrer">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Broken Access Control Lab</title>
 
-<style>
-* { box-sizing: border-box; }
-
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: #0d1117;
-    color: #e6edf3;
-}
-
-.container {
-    max-width: 900px;
-    margin: 50px auto;
-    padding: 25px;
-}
-
-a {
-    color: #58a6ff;
-    text-decoration: none;
-}
-
-h1 { font-size: 38px; }
-
-.subtitle { color: #9da7b3; }
-
-.lab {
-    margin-top: 30px;
-    padding: 28px;
-    background: #161b22;
-    border: 1px solid #30363d;
-    border-radius: 12px;
-}
-
-input {
-    width: 100%;
-    padding: 14px;
-    margin: 10px 0 20px;
-    background: #0d1117;
-    border: 1px solid #484f58;
-    border-radius: 6px;
-    color: white;
-    font-size: 16px;
-}
-
-.buttons {
-    display: flex;
-    gap: 15px;
-    flex-wrap: wrap;
-}
-
-button {
-    padding: 14px 24px;
-    border-radius: 7px;
-    color: white;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-button.vulnerable {
-    background: #da3633 !important;
-    border: 2px solid #f85149 !important;
-    color: #ffffff !important;
-}
-
-button.protected {
-    background: #238636 !important;
-    border: 2px solid #3fb950 !important;
-    color: #ffffff !important;
-}
-
-.result {
-    margin-top: 25px;
-    padding: 20px;
-    min-height: 120px;
-    background: #0d1117;
-    border-radius: 8px;
-    white-space: pre-wrap;
-}
-
-.result.bad {
-    background: #2d1215 !important;
-    border: 2px solid #f85149 !important;
-}
-
-.result.good {
-    background: #10261a !important;
-    border: 2px solid #3fb950 !important;
-}
-
-.info {
-    margin-top: 25px;
-    color: #9da7b3;
-    line-height: 1.6;
-}
-</style>
+<link rel="stylesheet" href="assets/access-control-0.css">
+<link rel="stylesheet" href="assets/offline.css">
+<script src="assets/offline.js" defer></script>
+<script src="assets/language.js" defer></script>
 </head>
 
 <body>
@@ -127,11 +37,11 @@ Try document 101 (Alice), 102 (Bob), or an unknown document ID.
 
 <div class="buttons">
 
-<button type="button" class="vulnerable" onclick="runVulnerable()">
+<button type="button" class="vulnerable" id="action-0">
 🔓 Run Vulnerable
 </button>
 
-<button type="button" class="protected" onclick="runProtected()">
+<button type="button" class="protected" id="action-1">
 🛡 Run Protected
 </button>
 
@@ -151,101 +61,7 @@ This is a local educational simulation using fictional data.
 
 </div>
 
-<script>
-const documents = Object.freeze({
-    "101": Object.freeze({
-        owner: "Alice",
-        content: "Alice private document"
-    }),
-    "102": Object.freeze({
-        owner: "Bob",
-        content: "Bob private document"
-    })
-});
-
-function getDocument(id) {
-    return Object.hasOwn(documents, id) ? documents[id] : null;
-}
-
-function runVulnerable() {
-    const id = document.getElementById("documentId").value.trim();
-    const result = document.getElementById("result");
-
-    /*
-      The lab remains intentionally vulnerable to IDOR:
-      an existing document is returned without checking ownership.
-      Object.hasOwn prevents inherited Object.prototype properties such as
-      "toString" and "__proto__" from being mistaken for documents.
-    */
-    const doc = getDocument(id);
-
-    result.className = "result bad";
-
-    if (!doc) {
-        result.textContent =
-`VULNERABLE REQUEST
-
-HTTP 404
-Document not found.`;
-        return;
-    }
-
-    result.textContent =
-`🔴 VULNERABLE — ACCESS GRANTED
-
-GET /api/documents/${id}
-
-HTTP 200 OK
-
-Owner: ${doc.owner}
-Content: ${doc.content}
-
-SECURITY ISSUE:
-No ownership authorization check was performed.`;
-}
-
-function runProtected() {
-    const id = document.getElementById("documentId").value.trim();
-    const result = document.getElementById("result");
-    const doc = getDocument(id);
-
-    result.className = "result good";
-
-    if (!doc) {
-        result.textContent =
-`🟢 PROTECTED
-
-HTTP 404
-Document not found.`;
-        return;
-    }
-
-    if (doc.owner !== "Alice") {
-        result.textContent =
-`🟢 PROTECTED — ACCESS DENIED
-
-GET /api/documents/${id}
-
-HTTP 403 Forbidden
-
-Current user: Alice
-Resource owner: ${doc.owner}
-
-Authorization check successfully blocked access.`;
-        return;
-    }
-
-    result.textContent =
-`🟢 PROTECTED — ACCESS GRANTED
-
-HTTP 200 OK
-
-Owner: ${doc.owner}
-Content: ${doc.content}
-
-Ownership successfully verified.`;
-}
-</script>
+<script src="assets/access-control-0.js" defer></script>
 
 </body>
 </html>

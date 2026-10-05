@@ -1,0 +1,495 @@
+{
+  "checks": 32,
+  "errors": 0,
+  "resultsPreserved": true,
+  "records": [
+    {
+      "dir": "hardening-original/interactive-web-security-lab-general-master",
+      "file": "api-validation",
+      "input": "{\"name\":\"Alice\",\"age\":25,\"email\":\"alice@example.com\"}",
+      "fn": "runVulnerable",
+      "result": "🔴 VULNERABLE HANDLER\n\nSIMULATED HTTP 201 Created\n\nREQUEST ACCEPTED WITHOUT VALIDATION\n\n{\n  \"name\": \"Alice\",\n  \"age\": 25,\n  \"email\": \"alice@example.com\"\n}\n\nSECURITY ISSUE:\n\nInvalid and unexpected values were allowed\nto reach application logic."
+    },
+    {
+      "dir": "hardening-original/interactive-web-security-lab-general-master",
+      "file": "api-validation",
+      "input": "{\"name\":\"Alice\",\"age\":25,\"email\":\"alice@example.com\"}",
+      "fn": "runProtected",
+      "result": "🟢 PROTECTED HANDLER\n\nSIMULATED HTTP 201 Created\n\nVALIDATION PASSED\n\n{\n  \"name\": \"Alice\",\n  \"age\": 25,\n  \"email\": \"alice@example.com\"\n}\n\nRequest accepted after validation."
+    },
+    {
+      "dir": "hardening-original/interactive-web-security-lab-general-master",
+      "file": "api-validation",
+      "input": "{}",
+      "fn": "runVulnerable",
+      "result": "🔴 VULNERABLE HANDLER\n\nSIMULATED HTTP 201 Created\n\nREQUEST ACCEPTED WITHOUT VALIDATION\n\n{}\n\nSECURITY ISSUE:\n\nInvalid and unexpected values were allowed\nto reach application logic."
+    },
+    {
+      "dir": "hardening-original/interactive-web-security-lab-general-master",
+      "file": "api-validation",
+      "input": "{}",
+      "fn": "runProtected",
+      "result": "🟢 PROTECTED HANDLER\n\nHTTP 422 Unprocessable Entity\n\nREQUEST BLOCKED\n\n• Invalid name\n• Age must be an integer from 18 to 120\n• Invalid email\n\nInput validation successfully rejected\nthe unsafe request."
+    },
+    {
+      "dir": "hardening-original/interactive-web-security-lab-general-master",
+      "file": "api-validation",
+      "input": "[]",
+      "fn": "runVulnerable",
+      "result": "🔴 VULNERABLE HANDLER\n\nSIMULATED HTTP 201 Created\n\nREQUEST ACCEPTED WITHOUT VALIDATION\n\n[]\n\nSECURITY ISSUE:\n\nInvalid and unexpected values were allowed\nto reach application logic."
+    },
+    {
+      "dir": "hardening-original/interactive-web-security-lab-general-master",
+      "file": "api-validation",
+      "input": "[]",
+      "fn": "runProtected",
+      "result": "🟢 PROTECTED HANDLER\n\nHTTP 422 Unprocessable Entity\n\nREQUEST BLOCKED\n\nRequest body must be a JSON object.\n\nInput validation successfully rejected\nthe unsafe request."
+    },
+    {
+      "dir": "hardening-original/interactive-web-security-lab-general-master",
+      "file": "api-validation",
+      "input": "null",
+      "fn": "runVulnerable",
+      "result": "🔴 VULNERABLE HANDLER\n\nSIMULATED HTTP 201 Created\n\nREQUEST ACCEPTED WITHOUT VALIDATION\n\nnull\n\nSECURITY ISSUE:\n\nInvalid and unexpected values were allowed\nto reach application logic."
+    },
+    {
+      "dir": "hardening-original/interactive-web-security-lab-general-master",
+      "file": "api-validation",
+      "input": "null",
+      "fn": "runProtected",
+      "result": "🟢 PROTECTED HANDLER\n\nHTTP 422 Unprocessable Entity\n\nREQUEST BLOCKED\n\nRequest body must be a JSON object.\n\nInput validation successfully rejected\nthe unsafe request."
+    },
+    {
+      "dir": "hardening-original/interactive-web-security-lab-general-master",
+      "file": "api-validation",
+      "input": "42",
+      "fn": "runVulnerable",
+      "result": "🔴 VULNERABLE HANDLER\n\nSIMULATED HTTP 201 Created\n\nREQUEST ACCEPTED WITHOUT VALIDATION\n\n42\n\nSECURITY ISSUE:\n\nInvalid and unexpected values were allowed\nto reach application logic."
+    },
+    {
+      "dir": "hardening-original/interactive-web-security-lab-general-master",
+      "file": "api-validation",
+      "input": "42",
+      "fn": "runProtected",
+      "result": "🟢 PROTECTED HANDLER\n\nHTTP 422 Unprocessable Entity\n\nREQUEST BLOCKED\n\nRequest body must be a JSON object.\n\nInput validation successfully rejected\nthe unsafe request."
+    },
+    {
+      "dir": "hardening-original/interactive-web-security-lab-general-master",
+      "file": "api-validation",
+      "input": "{",
+      "fn": "runVulnerable",
+      "result": "🔴 VULNERABLE HANDLER\n\nHTTP 400 Bad Request\n\nMalformed JSON."
+    },
+    {
+      "dir": "hardening-original/interactive-web-security-lab-general-master",
+      "file": "api-validation",
+      "input": "{",
+      "fn": "runProtected",
+      "result": "🟢 PROTECTED HANDLER\n\nHTTP 400 Bad Request\n\nMalformed JSON rejected."
+    },
+    {
+      "dir": "hardening-original/interactive-web-security-lab-general-master",
+      "file": "api-validation",
+      "input": "{\"name\":\"Alice\",\"age\":25,\"email\":\"alice@example.com\",\"admin\":true}",
+      "fn": "runVulnerable",
+      "result": "🔴 VULNERABLE HANDLER\n\nSIMULATED HTTP 201 Created\n\nREQUEST ACCEPTED WITHOUT VALIDATION\n\n{\n  \"name\": \"Alice\",\n  \"age\": 25,\n  \"email\": \"alice@example.com\",\n  \"admin\": true\n}\n\nSECURITY ISSUE:\n\nInvalid and unexpected values were allowed\nto reach application logic."
+    },
+    {
+      "dir": "hardening-original/interactive-web-security-lab-general-master",
+      "file": "api-validation",
+      "input": "{\"name\":\"Alice\",\"age\":25,\"email\":\"alice@example.com\",\"admin\":true}",
+      "fn": "runProtected",
+      "result": "🟢 PROTECTED HANDLER\n\nHTTP 422 Unprocessable Entity\n\nREQUEST BLOCKED\n\n• Unexpected field: admin\n\nInput validation successfully rejected\nthe unsafe request."
+    },
+    {
+      "dir": "hardening-original/interactive-web-security-lab-general-master",
+      "file": "access-control",
+      "input": "101",
+      "fn": "runVulnerable",
+      "result": "🔴 VULNERABLE — ACCESS GRANTED\n\nGET /api/documents/101\n\nHTTP 200 OK\n\nOwner: Alice\nContent: Alice private document\n\nSECURITY ISSUE:\nNo ownership authorization check was performed."
+    },
+    {
+      "dir": "hardening-original/interactive-web-security-lab-general-master",
+      "file": "access-control",
+      "input": "101",
+      "fn": "runProtected",
+      "result": "🟢 PROTECTED — ACCESS GRANTED\n\nHTTP 200 OK\n\nOwner: Alice\nContent: Alice private document\n\nOwnership successfully verified."
+    },
+    {
+      "dir": "hardening-original/interactive-web-security-lab-general-master",
+      "file": "access-control",
+      "input": "102",
+      "fn": "runVulnerable",
+      "result": "🔴 VULNERABLE — ACCESS GRANTED\n\nGET /api/documents/102\n\nHTTP 200 OK\n\nOwner: Bob\nContent: Bob private document\n\nSECURITY ISSUE:\nNo ownership authorization check was performed."
+    },
+    {
+      "dir": "hardening-original/interactive-web-security-lab-general-master",
+      "file": "access-control",
+      "input": "102",
+      "fn": "runProtected",
+      "result": "🟢 PROTECTED — ACCESS DENIED\n\nGET /api/documents/102\n\nHTTP 403 Forbidden\n\nCurrent user: Alice\nResource owner: Bob\n\nAuthorization check successfully blocked access."
+    },
+    {
+      "dir": "hardening-original/interactive-web-security-lab-general-master",
+      "file": "access-control",
+      "input": "999",
+      "fn": "runVulnerable",
+      "result": "VULNERABLE REQUEST\n\nHTTP 404\nDocument not found."
+    },
+    {
+      "dir": "hardening-original/interactive-web-security-lab-general-master",
+      "file": "access-control",
+      "input": "999",
+      "fn": "runProtected",
+      "result": "🟢 PROTECTED\n\nHTTP 404\nDocument not found."
+    },
+    {
+      "dir": "hardening-original/interactive-web-security-lab-general-master",
+      "file": "access-control",
+      "input": "toString",
+      "fn": "runVulnerable",
+      "result": "VULNERABLE REQUEST\n\nHTTP 404\nDocument not found."
+    },
+    {
+      "dir": "hardening-original/interactive-web-security-lab-general-master",
+      "file": "access-control",
+      "input": "toString",
+      "fn": "runProtected",
+      "result": "🟢 PROTECTED\n\nHTTP 404\nDocument not found."
+    },
+    {
+      "dir": "hardening-original/interactive-web-security-lab-general-master",
+      "file": "access-control",
+      "input": "__proto__",
+      "fn": "runVulnerable",
+      "result": "VULNERABLE REQUEST\n\nHTTP 404\nDocument not found."
+    },
+    {
+      "dir": "hardening-original/interactive-web-security-lab-general-master",
+      "file": "access-control",
+      "input": "__proto__",
+      "fn": "runProtected",
+      "result": "🟢 PROTECTED\n\nHTTP 404\nDocument not found."
+    },
+    {
+      "dir": "hardening-original/interactive-web-security-lab-general-master",
+      "file": "sql-injection",
+      "input": "alice",
+      "fn": "runVulnerable",
+      "result": "🔴 VULNERABLE — STRING CONCATENATION\n\nGenerated SQL:\n\nSELECT id, username FROM users WHERE username = 'alice'\n\nSECURITY ISSUE:\n\nUser-controlled input was inserted directly\ninto the SQL statement.\n\nSQL syntax and user data are not safely separated."
+    },
+    {
+      "dir": "hardening-original/interactive-web-security-lab-general-master",
+      "file": "sql-injection",
+      "input": "alice",
+      "fn": "runProtected",
+      "result": "🟢 PROTECTED — PARAMETERIZED QUERY\n\nSQL:\n\nSELECT id, username\nFROM users\nWHERE username = ?\n\nParameter:\n\n\"alice\"\n\nSECURE BEHAVIOR:\n\nThe SQL structure remains unchanged.\n\nUser input is handled as data,\nnot executable SQL syntax."
+    },
+    {
+      "dir": "hardening-original/interactive-web-security-lab-general-master",
+      "file": "sql-injection",
+      "input": "alice' OR '1'='1",
+      "fn": "runVulnerable",
+      "result": "🔴 VULNERABLE — STRING CONCATENATION\n\nGenerated SQL:\n\nSELECT id, username FROM users WHERE username = 'alice' OR '1'='1'\n\nSECURITY ISSUE:\n\nUser-controlled input was inserted directly\ninto the SQL statement.\n\nSQL syntax and user data are not safely separated."
+    },
+    {
+      "dir": "hardening-original/interactive-web-security-lab-general-master",
+      "file": "sql-injection",
+      "input": "alice' OR '1'='1",
+      "fn": "runProtected",
+      "result": "🟢 PROTECTED — PARAMETERIZED QUERY\n\nSQL:\n\nSELECT id, username\nFROM users\nWHERE username = ?\n\nParameter:\n\n\"alice' OR '1'='1\"\n\nSECURE BEHAVIOR:\n\nThe SQL structure remains unchanged.\n\nUser input is handled as data,\nnot executable SQL syntax."
+    },
+    {
+      "dir": "hardening-original/interactive-web-security-lab-general-master",
+      "file": "xss",
+      "input": "<b>Test</b>",
+      "fn": "runVulnerable",
+      "result": "🔴 VULNERABLE — UNSAFE HTML RENDERING\n\nUser input was interpreted as HTML inside an isolated sandbox.\n\nThe vulnerable example treats untrusted input as HTML.\n\nSECURITY ISSUE:\nHTML supplied by the user is rendered by the browser.\n\nISOLATION:\nThe rendered content is separated from the parent application context.",
+      "sandbox": {
+        "sandbox": "",
+        "title": "Isolated vulnerable HTML rendering output"
+      }
+    },
+    {
+      "dir": "hardening-original/interactive-web-security-lab-general-master",
+      "file": "xss",
+      "input": "<b>Test</b>",
+      "fn": "runSafe",
+      "result": "🟢 PROTECTED — SAFE TEXT RENDERING\n\nUser input was rendered as text.\n\nThe application treated the supplied value as data instead of HTML.\n\nPROTECTION:\nThe browser did not interpret the user input as HTML.",
+      "sandbox": {
+        "sandbox": "",
+        "title": "Isolated vulnerable HTML rendering output"
+      }
+    },
+    {
+      "dir": "hardening-original/interactive-web-security-lab-general-master",
+      "file": "xss",
+      "input": "<script>parent.document.body.remove()</script>",
+      "fn": "runVulnerable",
+      "result": "🔴 VULNERABLE — UNSAFE HTML RENDERING\n\nUser input was interpreted as HTML inside an isolated sandbox.\n\nThe vulnerable example treats untrusted input as HTML.\n\nSECURITY ISSUE:\nHTML supplied by the user is rendered by the browser.\n\nISOLATION:\nThe rendered content is separated from the parent application context.",
+      "sandbox": {
+        "sandbox": "",
+        "title": "Isolated vulnerable HTML rendering output"
+      }
+    },
+    {
+      "dir": "hardening-original/interactive-web-security-lab-general-master",
+      "file": "xss",
+      "input": "<script>parent.document.body.remove()</script>",
+      "fn": "runSafe",
+      "result": "🟢 PROTECTED — SAFE TEXT RENDERING\n\nUser input was rendered as text.\n\nThe application treated the supplied value as data instead of HTML.\n\nPROTECTION:\nThe browser did not interpret the user input as HTML.",
+      "sandbox": {
+        "sandbox": "",
+        "title": "Isolated vulnerable HTML rendering output"
+      }
+    },
+    {
+      "dir": "hardened-site",
+      "file": "api-validation",
+      "input": "{\"name\":\"Alice\",\"age\":25,\"email\":\"alice@example.com\"}",
+      "fn": "runVulnerable",
+      "result": "🔴 VULNERABLE HANDLER\n\nSIMULATED HTTP 201 Created\n\nREQUEST ACCEPTED WITHOUT VALIDATION\n\n{\n  \"name\": \"Alice\",\n  \"age\": 25,\n  \"email\": \"alice@example.com\"\n}\n\nSECURITY ISSUE:\n\nInvalid and unexpected values were allowed\nto reach application logic."
+    },
+    {
+      "dir": "hardened-site",
+      "file": "api-validation",
+      "input": "{\"name\":\"Alice\",\"age\":25,\"email\":\"alice@example.com\"}",
+      "fn": "runProtected",
+      "result": "🟢 PROTECTED HANDLER\n\nSIMULATED HTTP 201 Created\n\nVALIDATION PASSED\n\n{\n  \"name\": \"Alice\",\n  \"age\": 25,\n  \"email\": \"alice@example.com\"\n}\n\nRequest accepted after validation."
+    },
+    {
+      "dir": "hardened-site",
+      "file": "api-validation",
+      "input": "{}",
+      "fn": "runVulnerable",
+      "result": "🔴 VULNERABLE HANDLER\n\nSIMULATED HTTP 201 Created\n\nREQUEST ACCEPTED WITHOUT VALIDATION\n\n{}\n\nSECURITY ISSUE:\n\nInvalid and unexpected values were allowed\nto reach application logic."
+    },
+    {
+      "dir": "hardened-site",
+      "file": "api-validation",
+      "input": "{}",
+      "fn": "runProtected",
+      "result": "🟢 PROTECTED HANDLER\n\nHTTP 422 Unprocessable Entity\n\nREQUEST BLOCKED\n\n• Invalid name\n• Age must be an integer from 18 to 120\n• Invalid email\n\nInput validation successfully rejected\nthe unsafe request."
+    },
+    {
+      "dir": "hardened-site",
+      "file": "api-validation",
+      "input": "[]",
+      "fn": "runVulnerable",
+      "result": "🔴 VULNERABLE HANDLER\n\nSIMULATED HTTP 201 Created\n\nREQUEST ACCEPTED WITHOUT VALIDATION\n\n[]\n\nSECURITY ISSUE:\n\nInvalid and unexpected values were allowed\nto reach application logic."
+    },
+    {
+      "dir": "hardened-site",
+      "file": "api-validation",
+      "input": "[]",
+      "fn": "runProtected",
+      "result": "🟢 PROTECTED HANDLER\n\nHTTP 422 Unprocessable Entity\n\nREQUEST BLOCKED\n\nRequest body must be a JSON object.\n\nInput validation successfully rejected\nthe unsafe request."
+    },
+    {
+      "dir": "hardened-site",
+      "file": "api-validation",
+      "input": "null",
+      "fn": "runVulnerable",
+      "result": "🔴 VULNERABLE HANDLER\n\nSIMULATED HTTP 201 Created\n\nREQUEST ACCEPTED WITHOUT VALIDATION\n\nnull\n\nSECURITY ISSUE:\n\nInvalid and unexpected values were allowed\nto reach application logic."
+    },
+    {
+      "dir": "hardened-site",
+      "file": "api-validation",
+      "input": "null",
+      "fn": "runProtected",
+      "result": "🟢 PROTECTED HANDLER\n\nHTTP 422 Unprocessable Entity\n\nREQUEST BLOCKED\n\nRequest body must be a JSON object.\n\nInput validation successfully rejected\nthe unsafe request."
+    },
+    {
+      "dir": "hardened-site",
+      "file": "api-validation",
+      "input": "42",
+      "fn": "runVulnerable",
+      "result": "🔴 VULNERABLE HANDLER\n\nSIMULATED HTTP 201 Created\n\nREQUEST ACCEPTED WITHOUT VALIDATION\n\n42\n\nSECURITY ISSUE:\n\nInvalid and unexpected values were allowed\nto reach application logic."
+    },
+    {
+      "dir": "hardened-site",
+      "file": "api-validation",
+      "input": "42",
+      "fn": "runProtected",
+      "result": "🟢 PROTECTED HANDLER\n\nHTTP 422 Unprocessable Entity\n\nREQUEST BLOCKED\n\nRequest body must be a JSON object.\n\nInput validation successfully rejected\nthe unsafe request."
+    },
+    {
+      "dir": "hardened-site",
+      "file": "api-validation",
+      "input": "{",
+      "fn": "runVulnerable",
+      "result": "🔴 VULNERABLE HANDLER\n\nHTTP 400 Bad Request\n\nMalformed JSON."
+    },
+    {
+      "dir": "hardened-site",
+      "file": "api-validation",
+      "input": "{",
+      "fn": "runProtected",
+      "result": "🟢 PROTECTED HANDLER\n\nHTTP 400 Bad Request\n\nMalformed JSON rejected."
+    },
+    {
+      "dir": "hardened-site",
+      "file": "api-validation",
+      "input": "{\"name\":\"Alice\",\"age\":25,\"email\":\"alice@example.com\",\"admin\":true}",
+      "fn": "runVulnerable",
+      "result": "🔴 VULNERABLE HANDLER\n\nSIMULATED HTTP 201 Created\n\nREQUEST ACCEPTED WITHOUT VALIDATION\n\n{\n  \"name\": \"Alice\",\n  \"age\": 25,\n  \"email\": \"alice@example.com\",\n  \"admin\": true\n}\n\nSECURITY ISSUE:\n\nInvalid and unexpected values were allowed\nto reach application logic."
+    },
+    {
+      "dir": "hardened-site",
+      "file": "api-validation",
+      "input": "{\"name\":\"Alice\",\"age\":25,\"email\":\"alice@example.com\",\"admin\":true}",
+      "fn": "runProtected",
+      "result": "🟢 PROTECTED HANDLER\n\nHTTP 422 Unprocessable Entity\n\nREQUEST BLOCKED\n\n• Unexpected field: admin\n\nInput validation successfully rejected\nthe unsafe request."
+    },
+    {
+      "dir": "hardened-site",
+      "file": "access-control",
+      "input": "101",
+      "fn": "runVulnerable",
+      "result": "🔴 VULNERABLE — ACCESS GRANTED\n\nGET /api/documents/101\n\nHTTP 200 OK\n\nOwner: Alice\nContent: Alice private document\n\nSECURITY ISSUE:\nNo ownership authorization check was performed."
+    },
+    {
+      "dir": "hardened-site",
+      "file": "access-control",
+      "input": "101",
+      "fn": "runProtected",
+      "result": "🟢 PROTECTED — ACCESS GRANTED\n\nHTTP 200 OK\n\nOwner: Alice\nContent: Alice private document\n\nOwnership successfully verified."
+    },
+    {
+      "dir": "hardened-site",
+      "file": "access-control",
+      "input": "102",
+      "fn": "runVulnerable",
+      "result": "🔴 VULNERABLE — ACCESS GRANTED\n\nGET /api/documents/102\n\nHTTP 200 OK\n\nOwner: Bob\nContent: Bob private document\n\nSECURITY ISSUE:\nNo ownership authorization check was performed."
+    },
+    {
+      "dir": "hardened-site",
+      "file": "access-control",
+      "input": "102",
+      "fn": "runProtected",
+      "result": "🟢 PROTECTED — ACCESS DENIED\n\nGET /api/documents/102\n\nHTTP 403 Forbidden\n\nCurrent user: Alice\nResource owner: Bob\n\nAuthorization check successfully blocked access."
+    },
+    {
+      "dir": "hardened-site",
+      "file": "access-control",
+      "input": "999",
+      "fn": "runVulnerable",
+      "result": "VULNERABLE REQUEST\n\nHTTP 404\nDocument not found."
+    },
+    {
+      "dir": "hardened-site",
+      "file": "access-control",
+      "input": "999",
+      "fn": "runProtected",
+      "result": "🟢 PROTECTED\n\nHTTP 404\nDocument not found."
+    },
+    {
+      "dir": "hardened-site",
+      "file": "access-control",
+      "input": "toString",
+      "fn": "runVulnerable",
+      "result": "VULNERABLE REQUEST\n\nHTTP 404\nDocument not found."
+    },
+    {
+      "dir": "hardened-site",
+      "file": "access-control",
+      "input": "toString",
+      "fn": "runProtected",
+      "result": "🟢 PROTECTED\n\nHTTP 404\nDocument not found."
+    },
+    {
+      "dir": "hardened-site",
+      "file": "access-control",
+      "input": "__proto__",
+      "fn": "runVulnerable",
+      "result": "VULNERABLE REQUEST\n\nHTTP 404\nDocument not found."
+    },
+    {
+      "dir": "hardened-site",
+      "file": "access-control",
+      "input": "__proto__",
+      "fn": "runProtected",
+      "result": "🟢 PROTECTED\n\nHTTP 404\nDocument not found."
+    },
+    {
+      "dir": "hardened-site",
+      "file": "sql-injection",
+      "input": "alice",
+      "fn": "runVulnerable",
+      "result": "🔴 VULNERABLE — STRING CONCATENATION\n\nGenerated SQL:\n\nSELECT id, username FROM users WHERE username = 'alice'\n\nSECURITY ISSUE:\n\nUser-controlled input was inserted directly\ninto the SQL statement.\n\nSQL syntax and user data are not safely separated."
+    },
+    {
+      "dir": "hardened-site",
+      "file": "sql-injection",
+      "input": "alice",
+      "fn": "runProtected",
+      "result": "🟢 PROTECTED — PARAMETERIZED QUERY\n\nSQL:\n\nSELECT id, username\nFROM users\nWHERE username = ?\n\nParameter:\n\n\"alice\"\n\nSECURE BEHAVIOR:\n\nThe SQL structure remains unchanged.\n\nUser input is handled as data,\nnot executable SQL syntax."
+    },
+    {
+      "dir": "hardened-site",
+      "file": "sql-injection",
+      "input": "alice' OR '1'='1",
+      "fn": "runVulnerable",
+      "result": "🔴 VULNERABLE — STRING CONCATENATION\n\nGenerated SQL:\n\nSELECT id, username FROM users WHERE username = 'alice' OR '1'='1'\n\nSECURITY ISSUE:\n\nUser-controlled input was inserted directly\ninto the SQL statement.\n\nSQL syntax and user data are not safely separated."
+    },
+    {
+      "dir": "hardened-site",
+      "file": "sql-injection",
+      "input": "alice' OR '1'='1",
+      "fn": "runProtected",
+      "result": "🟢 PROTECTED — PARAMETERIZED QUERY\n\nSQL:\n\nSELECT id, username\nFROM users\nWHERE username = ?\n\nParameter:\n\n\"alice' OR '1'='1\"\n\nSECURE BEHAVIOR:\n\nThe SQL structure remains unchanged.\n\nUser input is handled as data,\nnot executable SQL syntax."
+    },
+    {
+      "dir": "hardened-site",
+      "file": "xss",
+      "input": "<b>Test</b>",
+      "fn": "runVulnerable",
+      "result": "🔴 VULNERABLE — UNSAFE HTML RENDERING\n\nUser input was interpreted as HTML inside an isolated sandbox.\n\nThe vulnerable example treats untrusted input as HTML.\n\nSECURITY ISSUE:\nHTML supplied by the user is rendered by the browser.\n\nISOLATION:\nThe rendered content is separated from the parent application context.",
+      "sandbox": {
+        "sandbox": "",
+        "title": "Isolated vulnerable HTML rendering output",
+        "referrerpolicy": "no-referrer",
+        "allow": "camera 'none'; microphone 'none'; geolocation 'none'"
+      }
+    },
+    {
+      "dir": "hardened-site",
+      "file": "xss",
+      "input": "<b>Test</b>",
+      "fn": "runSafe",
+      "result": "🟢 PROTECTED — SAFE TEXT RENDERING\n\nUser input was rendered as text.\n\nThe application treated the supplied value as data instead of HTML.\n\nPROTECTION:\nThe browser did not interpret the user input as HTML.",
+      "sandbox": {
+        "sandbox": "",
+        "title": "Isolated vulnerable HTML rendering output",
+        "referrerpolicy": "no-referrer",
+        "allow": "camera 'none'; microphone 'none'; geolocation 'none'"
+      }
+    },
+    {
+      "dir": "hardened-site",
+      "file": "xss",
+      "input": "<script>parent.document.body.remove()</script>",
+      "fn": "runVulnerable",
+      "result": "🔴 VULNERABLE — UNSAFE HTML RENDERING\n\nUser input was interpreted as HTML inside an isolated sandbox.\n\nThe vulnerable example treats untrusted input as HTML.\n\nSECURITY ISSUE:\nHTML supplied by the user is rendered by the browser.\n\nISOLATION:\nThe rendered content is separated from the parent application context.",
+      "sandbox": {
+        "sandbox": "",
+        "title": "Isolated vulnerable HTML rendering output",
+        "referrerpolicy": "no-referrer",
+        "allow": "camera 'none'; microphone 'none'; geolocation 'none'"
+      }
+    },
+    {
+      "dir": "hardened-site",
+      "file": "xss",
+      "input": "<script>parent.document.body.remove()</script>",
+      "fn": "runSafe",
+      "result": "🟢 PROTECTED — SAFE TEXT RENDERING\n\nUser input was rendered as text.\n\nThe application treated the supplied value as data instead of HTML.\n\nPROTECTION:\nThe browser did not interpret the user input as HTML.",
+      "sandbox": {
+        "sandbox": "",
+        "title": "Isolated vulnerable HTML rendering output",
+        "referrerpolicy": "no-referrer",
+        "allow": "camera 'none'; microphone 'none'; geolocation 'none'"
+      }
+    }
+  ]
+}

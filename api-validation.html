@@ -1,115 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; script-src-attr 'none'; style-src 'self'; img-src 'self'; font-src 'none'; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-src 'self'; worker-src 'self'">
+<meta name="referrer" content="no-referrer">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>API Input Validation Lab</title>
 
-<style>
-* { box-sizing: border-box; }
-
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: #0d1117;
-    color: #e6edf3;
-}
-
-.container {
-    max-width: 900px;
-    margin: 50px auto;
-    padding: 25px;
-}
-
-a {
-    color: #58a6ff;
-    text-decoration: none;
-}
-
-h1 { font-size: 38px; }
-
-.subtitle { color: #9da7b3; }
-
-.lab {
-    margin-top: 30px;
-    padding: 28px;
-    background: #161b22;
-    border: 1px solid #30363d;
-    border-radius: 12px;
-}
-
-textarea {
-    width: 100%;
-    height: 180px;
-    padding: 14px;
-    margin: 10px 0 20px;
-    background: #0d1117;
-    border: 1px solid #484f58;
-    border-radius: 6px;
-    color: white;
-    font-family: monospace;
-    font-size: 15px;
-}
-
-.buttons {
-    display: flex;
-    gap: 15px;
-    flex-wrap: wrap;
-}
-
-button {
-    padding: 14px 24px;
-    border-radius: 7px;
-    color: white;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-button.vulnerable {
-    background: #da3633 !important;
-    border: 2px solid #f85149 !important;
-    color: white !important;
-}
-
-button.protected {
-    background: #238636 !important;
-    border: 2px solid #3fb950 !important;
-    color: white !important;
-}
-
-button.example {
-    background: #30363d !important;
-    border: 2px solid #484f58 !important;
-    color: white !important;
-}
-
-.result {
-    margin-top: 25px;
-    padding: 20px;
-    min-height: 150px;
-    border-radius: 8px;
-    background: #0d1117;
-    white-space: pre-wrap;
-    font-family: monospace;
-}
-
-.result.bad {
-    background: #2d1215 !important;
-    border: 2px solid #f85149 !important;
-}
-
-.result.good {
-    background: #10261a !important;
-    border: 2px solid #3fb950 !important;
-}
-
-.info {
-    margin-top: 25px;
-    color: #9da7b3;
-    line-height: 1.6;
-}
-</style>
+<link rel="stylesheet" href="assets/api-validation-0.css">
+<link rel="stylesheet" href="assets/offline.css">
+<script src="assets/offline.js" defer></script>
+<script src="assets/language.js" defer></script>
 </head>
 
 <body>
@@ -140,15 +41,15 @@ Enter a JSON object containing name, age and email.
 
 <div class="buttons">
 
-<button type="button" class="vulnerable" onclick="runVulnerable()">
+<button type="button" class="vulnerable" id="action-0">
 🔓 Send Without Validation
 </button>
 
-<button type="button" class="protected" onclick="runProtected()">
+<button type="button" class="protected" id="action-1">
 🛡 Send With Validation
 </button>
 
-<button type="button" class="example" onclick="insertInvalid()">
+<button type="button" class="example" id="action-2">
 Insert Invalid Data
 </button>
 
@@ -167,152 +68,7 @@ This laboratory runs locally and does not send data to a real API.
 
 </div>
 
-<script>
-function insertInvalid() {
-    document.getElementById("jsonInput").value =
-`{
-  "name": "",
-  "age": -500,
-  "email": "not-an-email",
-  "admin": true
-}`;
-}
-
-function runVulnerable() {
-    const result = document.getElementById("result");
-    const input = document.getElementById("jsonInput").value;
-
-    try {
-        const data = JSON.parse(input);
-
-        result.className = "result bad";
-        result.textContent =
-`🔴 VULNERABLE HANDLER
-
-SIMULATED HTTP 201 Created
-
-REQUEST ACCEPTED WITHOUT VALIDATION
-
-${JSON.stringify(data, null, 2)}
-
-SECURITY ISSUE:
-
-Invalid and unexpected values were allowed
-to reach application logic.`;
-
-    } catch (error) {
-        result.className = "result bad";
-        result.textContent =
-`🔴 VULNERABLE HANDLER
-
-HTTP 400 Bad Request
-
-Malformed JSON.`;
-    }
-}
-
-function runProtected() {
-    const result = document.getElementById("result");
-    const input = document.getElementById("jsonInput").value;
-
-    let data;
-
-    try {
-        data = JSON.parse(input);
-    } catch (error) {
-        result.className = "result good";
-        result.textContent =
-`🟢 PROTECTED HANDLER
-
-HTTP 400 Bad Request
-
-Malformed JSON rejected.`;
-        return;
-    }
-
-    /* A valid request body for this lab must be a plain JSON object.
-       Reject null, arrays and primitive JSON values before Object.keys(). */
-    if (
-        data === null ||
-        Array.isArray(data) ||
-        typeof data !== "object"
-    ) {
-        result.className = "result good";
-        result.textContent =
-`🟢 PROTECTED HANDLER
-
-HTTP 422 Unprocessable Entity
-
-REQUEST BLOCKED
-
-Request body must be a JSON object.
-
-Input validation successfully rejected
-the unsafe request.`;
-        return;
-    }
-
-    const errors = [];
-    const allowedFields = ["name", "age", "email"];
-
-    Object.keys(data).forEach(key => {
-        if (!allowedFields.includes(key)) {
-            errors.push("Unexpected field: " + key);
-        }
-    });
-
-    if (
-        typeof data.name !== "string" ||
-        data.name.trim().length < 1 ||
-        data.name.trim().length > 80
-    ) {
-        errors.push("Invalid name");
-    }
-
-    if (
-        !Number.isInteger(data.age) ||
-        data.age < 18 ||
-        data.age > 120
-    ) {
-        errors.push("Age must be an integer from 18 to 120");
-    }
-
-    if (
-        typeof data.email !== "string" ||
-        !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)
-    ) {
-        errors.push("Invalid email");
-    }
-
-    result.className = "result good";
-
-    if (errors.length > 0) {
-        result.textContent =
-`🟢 PROTECTED HANDLER
-
-HTTP 422 Unprocessable Entity
-
-REQUEST BLOCKED
-
-${errors.map(error => "• " + error).join("\n")}
-
-Input validation successfully rejected
-the unsafe request.`;
-        return;
-    }
-
-    result.textContent =
-`🟢 PROTECTED HANDLER
-
-SIMULATED HTTP 201 Created
-
-VALIDATION PASSED
-
-${JSON.stringify(data, null, 2)}
-
-Request accepted after validation.`;
-}
-</script>
+<script src="assets/api-validation-0.js" defer></script>
 
 </body>
 </html>
