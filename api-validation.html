@@ -126,31 +126,35 @@ Compare an API handler without validation with protected input validation.
 
 <div class="lab">
 
-<label><strong>JSON Request Body</strong></label>
+<label for="jsonInput"><strong>JSON Request Body</strong></label>
 
-<textarea id="jsonInput">{
+<textarea id="jsonInput" aria-describedby="jsonHelp">{
   "name": "Alice",
   "age": 25,
   "email": "alice@example.com"
 }</textarea>
 
+<p id="jsonHelp" class="subtitle">
+Enter a JSON object containing name, age and email.
+</p>
+
 <div class="buttons">
 
-<button class="vulnerable" onclick="runVulnerable()">
+<button type="button" class="vulnerable" onclick="runVulnerable()">
 🔓 Send Without Validation
 </button>
 
-<button class="protected" onclick="runProtected()">
+<button type="button" class="protected" onclick="runProtected()">
 🛡 Send With Validation
 </button>
 
-<button class="example" onclick="insertInvalid()">
+<button type="button" class="example" onclick="insertInvalid()">
 Insert Invalid Data
 </button>
 
 </div>
 
-<div id="result" class="result">
+<div id="result" class="result" role="status" aria-live="polite" aria-atomic="true">
 Choose Vulnerable or Protected to process the simulated API request.
 </div>
 
@@ -165,7 +169,6 @@ This laboratory runs locally and does not send data to a real API.
 
 <script>
 function insertInvalid() {
-
     document.getElementById("jsonInput").value =
 `{
   "name": "",
@@ -176,19 +179,13 @@ function insertInvalid() {
 }
 
 function runVulnerable() {
-
-    const result =
-        document.getElementById("result");
-
-    const input =
-        document.getElementById("jsonInput").value;
+    const result = document.getElementById("result");
+    const input = document.getElementById("jsonInput").value;
 
     try {
-
         const data = JSON.parse(input);
 
         result.className = "result bad";
-
         result.textContent =
 `🔴 VULNERABLE HANDLER
 
@@ -204,9 +201,7 @@ Invalid and unexpected values were allowed
 to reach application logic.`;
 
     } catch (error) {
-
         result.className = "result bad";
-
         result.textContent =
 `🔴 VULNERABLE HANDLER
 
@@ -217,46 +212,53 @@ Malformed JSON.`;
 }
 
 function runProtected() {
-
-    const result =
-        document.getElementById("result");
-
-    const input =
-        document.getElementById("jsonInput").value;
+    const result = document.getElementById("result");
+    const input = document.getElementById("jsonInput").value;
 
     let data;
 
     try {
-
         data = JSON.parse(input);
-
     } catch (error) {
-
         result.className = "result good";
-
         result.textContent =
 `🟢 PROTECTED HANDLER
 
 HTTP 400 Bad Request
 
 Malformed JSON rejected.`;
+        return;
+    }
 
+    /* A valid request body for this lab must be a plain JSON object.
+       Reject null, arrays and primitive JSON values before Object.keys(). */
+    if (
+        data === null ||
+        Array.isArray(data) ||
+        typeof data !== "object"
+    ) {
+        result.className = "result good";
+        result.textContent =
+`🟢 PROTECTED HANDLER
+
+HTTP 422 Unprocessable Entity
+
+REQUEST BLOCKED
+
+Request body must be a JSON object.
+
+Input validation successfully rejected
+the unsafe request.`;
         return;
     }
 
     const errors = [];
-
-    const allowedFields =
-        ["name", "age", "email"];
+    const allowedFields = ["name", "age", "email"];
 
     Object.keys(data).forEach(key => {
-
         if (!allowedFields.includes(key)) {
-            errors.push(
-                "Unexpected field: " + key
-            );
+            errors.push("Unexpected field: " + key);
         }
-
     });
 
     if (
@@ -272,9 +274,7 @@ Malformed JSON rejected.`;
         data.age < 18 ||
         data.age > 120
     ) {
-        errors.push(
-            "Age must be an integer from 18 to 120"
-        );
+        errors.push("Age must be an integer from 18 to 120");
     }
 
     if (
@@ -287,7 +287,6 @@ Malformed JSON rejected.`;
     result.className = "result good";
 
     if (errors.length > 0) {
-
         result.textContent =
 `🟢 PROTECTED HANDLER
 
@@ -299,7 +298,6 @@ ${errors.map(error => "• " + error).join("\n")}
 
 Input validation successfully rejected
 the unsafe request.`;
-
         return;
     }
 

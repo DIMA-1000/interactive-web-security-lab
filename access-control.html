@@ -117,22 +117,27 @@ Current user: Alice (User ID 1). Test access to fictional documents.
 
 <div class="lab">
 
-<label><strong>Document ID</strong></label>
-<input id="documentId" value="102">
+<label for="documentId"><strong>Document ID</strong></label>
+<input id="documentId" type="text" value="102" inputmode="numeric" autocomplete="off"
+       aria-describedby="documentHelp">
+
+<p id="documentHelp" class="subtitle">
+Try document 101 (Alice), 102 (Bob), or an unknown document ID.
+</p>
 
 <div class="buttons">
 
-<button class="vulnerable" onclick="runVulnerable()">
+<button type="button" class="vulnerable" onclick="runVulnerable()">
 🔓 Run Vulnerable
 </button>
 
-<button class="protected" onclick="runProtected()">
+<button type="button" class="protected" onclick="runProtected()">
 🛡 Run Protected
 </button>
 
 </div>
 
-<div id="result" class="result">
+<div id="result" class="result" role="status" aria-live="polite" aria-atomic="true">
 Document 101 belongs to Alice. Document 102 belongs to Bob.
 </div>
 
@@ -147,22 +152,32 @@ This is a local educational simulation using fictional data.
 </div>
 
 <script>
-const documents = {
-    "101": {
+const documents = Object.freeze({
+    "101": Object.freeze({
         owner: "Alice",
         content: "Alice private document"
-    },
-    "102": {
+    }),
+    "102": Object.freeze({
         owner: "Bob",
         content: "Bob private document"
-    }
-};
+    })
+});
+
+function getDocument(id) {
+    return Object.hasOwn(documents, id) ? documents[id] : null;
+}
 
 function runVulnerable() {
-
     const id = document.getElementById("documentId").value.trim();
     const result = document.getElementById("result");
-    const doc = documents[id];
+
+    /*
+      The lab remains intentionally vulnerable to IDOR:
+      an existing document is returned without checking ownership.
+      Object.hasOwn prevents inherited Object.prototype properties such as
+      "toString" and "__proto__" from being mistaken for documents.
+    */
+    const doc = getDocument(id);
 
     result.className = "result bad";
 
@@ -190,10 +205,9 @@ No ownership authorization check was performed.`;
 }
 
 function runProtected() {
-
     const id = document.getElementById("documentId").value.trim();
     const result = document.getElementById("result");
-    const doc = documents[id];
+    const doc = getDocument(id);
 
     result.className = "result good";
 
