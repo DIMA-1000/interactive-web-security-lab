@@ -27,7 +27,6 @@ a {
 }
 
 h1 { font-size: 38px; }
-
 .subtitle { color: #9da7b3; }
 
 .lab {
@@ -67,19 +66,16 @@ button {
 button.vulnerable {
     background: #da3633 !important;
     border: 2px solid #f85149 !important;
-    color: white !important;
 }
 
 button.protected {
     background: #238636 !important;
     border: 2px solid #3fb950 !important;
-    color: white !important;
 }
 
 button.example {
     background: #30363d !important;
     border: 2px solid #484f58 !important;
-    color: white !important;
 }
 
 .result {
@@ -124,26 +120,36 @@ Unsafe SQL construction vs parameterized query handling.
 
 <div class="lab">
 
-<label><strong>Username</strong></label>
-<input id="username" value="alice">
+<label for="username"><strong>Username</strong></label>
+<input
+    id="username"
+    type="text"
+    value="alice"
+    autocomplete="off"
+    aria-describedby="usernameHelp"
+>
+
+<p id="usernameHelp" class="subtitle">
+Enter a username or use the test example to compare query construction.
+</p>
 
 <div class="buttons">
 
-<button class="vulnerable" onclick="runVulnerable()">
+<button type="button" class="vulnerable" onclick="runVulnerable()">
 🔓 Run Vulnerable
 </button>
 
-<button class="protected" onclick="runProtected()">
+<button type="button" class="protected" onclick="runProtected()">
 🛡 Run Protected
 </button>
 
-<button class="example" onclick="insertExample()">
+<button type="button" class="example" onclick="insertExample()">
 Insert Test Example
 </button>
 
 </div>
 
-<div id="result" class="result">
+<div id="result" class="result" role="status" aria-live="polite" aria-atomic="true">
 Choose Vulnerable or Protected to compare query handling.
 </div>
 
@@ -164,12 +170,8 @@ function insertExample() {
 }
 
 function runVulnerable() {
-
-    const value =
-        document.getElementById("username").value;
-
-    const result =
-        document.getElementById("result");
+    const value = document.getElementById("username").value;
+    const result = document.getElementById("result");
 
     const query =
         "SELECT id, username FROM users WHERE username = '" +
@@ -194,12 +196,8 @@ SQL syntax and user data are not safely separated.`;
 }
 
 function runProtected() {
-
-    const value =
-        document.getElementById("username").value;
-
-    const result =
-        document.getElementById("result");
+    const value = document.getElementById("username").value;
+    const result = document.getElementById("result");
 
     result.className = "result good";
 
