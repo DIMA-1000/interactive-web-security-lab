@@ -1246,20 +1246,6 @@ h1.auto-scan::after { opacity: .8; animation: nameScan 2.8s ease-in-out; }
 .thanks[role="button"] { cursor: pointer; }
 .thanks:focus-visible { outline: 1px solid var(--blue); outline-offset: 5px; }
 
-/* Full-width live circuit panel inspired by the supplied audit illustration. */
-.audit-banner{grid-column:1/-1;min-height:clamp(440px,42vw,620px);padding:0;overflow:hidden;border:1px solid #217f91;box-shadow:inset 0 0 35px #0f55652b,0 12px 32px #0004;background:radial-gradient(ellipse at 15% 70%,#07303766,transparent 50%),#030b12}
-.audit-banner .audit-circuit{position:absolute;inset:0;width:100%;height:100%;opacity:.9;mask-image:none}
-.audit-banner .audit-trace{stroke:#17afc9;stroke-width:1.1;opacity:.55}.audit-banner .trace-1{stroke:#24d69d}.audit-banner .trace-2{stroke:#2988c4;opacity:.4}
-.audit-banner .audit-pulse{stroke-width:2.8;stroke-dasharray:4 96;animation-duration:17s;filter:drop-shadow(0 0 5px #29e6da)}
-.audit-banner .audit-node{fill:#5fffc2;filter:drop-shadow(0 0 4px #00d7a4)}
-.audit-banner .audit-card-content{width:56%;height:auto;margin:clamp(145px,16vw,230px) 0 0 auto;padding:24px 34px 30px;background:linear-gradient(90deg,#030b12aa,#030b12f5 22%);gap:0}
-.audit-banner h3{font-size:clamp(26px,3vw,40px);line-height:1.2;margin-bottom:12px}.audit-banner .audit-mini-status{margin:8px 0;font-size:17px;color:#40f3af}.audit-banner .audit-banner-scope{font:11px/1.5 monospace;color:#91adb7;margin:0 0 14px}
-.audit-badges{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 14px}.audit-badges span{border:1px solid #205361;padding:8px 10px;font:11px monospace;color:#7ae9df;background:#07121b}
-.audit-banner .audit-banner-warning{font:11px/1.6 monospace;color:#eac673;border:1px solid #72572266;padding:10px 12px;margin:0 0 16px;background:#11120f}
-.audit-banner .audit-link{margin-top:0;border:1px solid #28c9df;padding:14px 24px;align-self:flex-start;color:#86f4ff;background:#041018;box-shadow:0 0 12px #11c7dd22}
-@media(max-width:650px){.audit-banner{min-height:560px}.audit-banner .audit-circuit{height:320px;opacity:.8}.audit-banner .audit-card-content{width:100%;margin-top:210px;padding:24px 20px;background:linear-gradient(180deg,#030b12bb,#030b12 22%)}.audit-banner h3{font-size:27px}.audit-banner .audit-link{width:100%;text-align:center}}
-@media(prefers-reduced-motion:reduce){.audit-banner .audit-pulse{animation:none}}
-
 /* Readable hardening labels; compact label/status pairs. */
 .hardening-title{font-size:clamp(16px,1.3vw,19px);line-height:1.5;letter-spacing:.04em}
 .hardening-row,.hardening-panel .hardening-row{font-size:clamp(16px,1.25vw,18px);line-height:1.5;letter-spacing:0;min-height:42px;padding-block:8px}
@@ -1273,3 +1259,36 @@ body.hardened .hardening-panel{max-height:900px}
 .lab-tooltip{font-size:clamp(17px,1.35vw,19px);line-height:1.6;padding:16px;overflow-wrap:anywhere}
 .open{font-size:clamp(18px,1.5vw,20px);min-height:50px;padding:10px 14px;line-height:1.4;letter-spacing:.04em}
 .audit-banner .audit-banner-scope{font-size:16px;line-height:1.6}
+
+/* Single grid-cell audit card: circuit illustration with slow live pulses. */
+.audit-compact{grid-column:auto;min-height:248px;padding:23px 21px 20px;background:radial-gradient(ellipse at 20% 10%,#07353b88,transparent 65%),#050c13;border-color:#246877}
+.audit-compact .audit-circuit{inset:0 0 auto;height:150px;width:100%;opacity:1;z-index:0;filter:none;mask-image:linear-gradient(#000 65%,transparent)}
+.audit-compact .audit-card-content{position:relative;width:100%;height:100%;margin:0;padding:108px 0 0;background:none;flex:1}
+.audit-compact .audit-trace{stroke:#23d6e6;stroke-width:.8;opacity:.45}.audit-compact .trace-1{stroke:#37edaa}.audit-compact .trace-2{stroke:#239fff}
+.audit-bright{fill:none;stroke-width:1.8;opacity:.8;filter:drop-shadow(0 0 3px #24d6dd)}
+.audit-compact .audit-pulse{stroke:#aefff0;stroke-width:3;stroke-dasharray:4 96;animation-duration:16s;filter:drop-shadow(0 0 4px #27ffbf)}
+.audit-compact .audit-node{fill:#72ffdf;filter:drop-shadow(0 0 3px #29ffbd)}
+.audit-detail{fill:none;stroke:#2892ab;stroke-width:.7;opacity:.25}.detail-node{opacity:.5}
+.audit-arrow{fill:none;stroke:#75ffee;stroke-width:2;filter:drop-shadow(0 0 4px #18dac7)}
+.audit-compact .audit-code{margin-bottom:17px}.audit-compact h3{font-size:20px;line-height:1.2;margin-bottom:13px}
+.audit-compact .audit-mini-status{font-size:16px;line-height:1.5;letter-spacing:.015em;margin:0 0 18px;flex-wrap:wrap}
+.audit-compact .audit-link{margin-top:auto;align-self:stretch;width:100%}
+@media(prefers-reduced-motion:reduce){.audit-compact .audit-pulse{animation:none}}
+
+/* Slightly smaller name, retaining scanner and glyph padding. */
+.name-row h1{font-size:clamp(39px,5.2vw,78px)}
+@media(max-width:650px){.name-row h1{font-size:clamp(31px,9.3vw,49px)}}
+
+/* Audit artwork is an absolute background, with no layout footprint. */
+.audit-compact{min-height:248px;align-self:stretch;padding:23px 21px 20px}
+.audit-compact .audit-circuit{position:absolute;inset:0;width:100%;height:100%;z-index:0;opacity:.65;mask-image:none;pointer-events:none}
+.audit-compact .audit-card-content{padding:0;margin:0;width:100%;height:100%;position:relative;z-index:2;background:none}
+.audit-compact::after{inset:0;width:auto;height:auto;transform:none;border:0;z-index:1;pointer-events:none;background:linear-gradient(180deg,rgba(3,10,17,.48),rgba(3,10,17,.87) 28%,rgba(3,10,17,.78) 76%,rgba(3,10,17,.55))}
+.audit-compact .audit-trace{stroke-width:.85;opacity:.6}
+.audit-compact .audit-bright{stroke-width:1.9;opacity:.9}
+.audit-compact .audit-pulse{stroke-width:3;animation-duration:18s}
+.audit-compact h3,.audit-compact p,.audit-compact .lab-code,.audit-compact .audit-mini-status{text-shadow:0 2px 4px #02060c,0 0 8px #02060c}
+
+/* Remove stationary pulsing dots and outlined circuit endpoints. */
+.circuit-bg .node{display:none;animation:none}
+.circuit-bg .trace::after{content:none;display:none}
