@@ -21,9 +21,7 @@ body {
     padding: 40px 20px;
 }
 
-a {
-    color: #58a6ff;
-}
+a { color: #58a6ff; }
 
 .lab {
     background: #151b23;
@@ -103,6 +101,14 @@ button.safe {
     border-radius: 6px;
     font-size: 17px;
 }
+
+.output-frame {
+    width: 100%;
+    min-height: 90px;
+    border: 0;
+    background: #0d1117;
+    color-scheme: dark;
+}
 </style>
 </head>
 
@@ -123,29 +129,38 @@ and a safer alternative.
 
 <h2>Test Input</h2>
 
+<label for="userInput"><strong>HTML test input</strong></label>
+
 <input
     id="userInput"
+    type="text"
     value="<b>Security Test</b>"
     placeholder="Enter test HTML"
+    autocomplete="off"
+    aria-describedby="inputHelp"
 >
+
+<p id="inputHelp">
+The vulnerable example renders the supplied HTML inside an isolated sandbox.
+</p>
 
 <div class="buttons">
 
-<button class="vulnerable" onclick="runVulnerable()">
+<button type="button" class="vulnerable" onclick="runVulnerable()">
 🔓 Run Vulnerable
 </button>
 
-<button class="safe" onclick="runSafe()">
+<button type="button" class="safe" onclick="runSafe()">
 🛡 Run Protected
 </button>
 
 </div>
 
-<div id="status" class="status"></div>
+<div id="status" class="status" role="status" aria-live="polite" aria-atomic="true"></div>
 
 <h3>Application Output</h3>
 
-<div id="output" class="output">
+<div id="output" class="output" role="region" aria-label="Application output" aria-live="polite">
 Waiting for test...
 </div>
 
@@ -154,30 +169,40 @@ Waiting for test...
 </div>
 
 <script>
-
 function runVulnerable() {
-
     const input = document.getElementById("userInput").value;
     const output = document.getElementById("output");
     const status = document.getElementById("status");
 
-    output.innerHTML = input;
+    /*
+      Intentionally unsafe rendering is confined to a sandboxed iframe.
+      No allow-scripts and no allow-same-origin are granted, so injected
+      script/event-handler code cannot execute in the parent page context.
+    */
+    const frame = document.createElement("iframe");
+    frame.className = "output-frame";
+    frame.setAttribute("sandbox", "");
+    frame.setAttribute("title", "Isolated vulnerable HTML rendering output");
+    frame.srcdoc = input;
+
+    output.replaceChildren(frame);
 
     status.className = "status bad";
-
     status.textContent =
 `🔴 VULNERABLE — UNSAFE HTML RENDERING
 
-User input was interpreted as HTML.
+User input was interpreted as HTML inside an isolated sandbox.
 
-The application inserted untrusted input directly into the page using innerHTML.
+The vulnerable example treats untrusted input as HTML.
 
 SECURITY ISSUE:
-HTML supplied by the user was rendered by the browser.`;
+HTML supplied by the user is rendered by the browser.
+
+ISOLATION:
+The rendered content is separated from the parent application context.`;
 }
 
 function runSafe() {
-
     const input = document.getElementById("userInput").value;
     const output = document.getElementById("output");
     const status = document.getElementById("status");
@@ -185,7 +210,6 @@ function runSafe() {
     output.textContent = input;
 
     status.className = "status good";
-
     status.textContent =
 `🟢 PROTECTED — SAFE TEXT RENDERING
 
@@ -196,7 +220,6 @@ The application treated the supplied value as data instead of HTML.
 PROTECTION:
 The browser did not interpret the user input as HTML.`;
 }
-
 </script>
 
 </body>
