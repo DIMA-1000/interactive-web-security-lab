@@ -19,14 +19,14 @@ const FILES = {
   "assets/xss-0.js": "8969967318435bd3da88f9a738cd21c94897736c1558748c3e96b12eecc90e0d",
   "banner.png": "c9dc109cdedb7aa7438199bb3295b41579cb346630a9ecebb892cc38daef513e",
   "favicon.png": "b8ce71bb1141a5595f0b56c4a23ab01c7b99e4261c9871dee035796fcd57a5d9",
-  "index.html": "52eba9ce725a83aee4e006e6cbb600731dd736ddb9c5de80a0c1bf2227c33e04",
+  "index.html": "3a954eb76dfff3f00b2a301366e22a4e090999079c1f2a2f56aa59145eb0a10d",
   "security-audit.html": "bb03931d5334c4eba4f3bb15e5d1d32289af2c2f6a85eeab3d6b859de9f187af",
   "sql-injection.html": "552f6912b34993edc6ea49780935ca769b525c614d88f012ae3927c464e77862",
   "xss.html": "8ddee9206fcaea9ba3399b1527702570405e8c109125258526dcd383a2070dfa"
 };
 const BASE = new URL('./', self.location.href);
 const PREFIX = 'iwsl-offline-' + BASE.pathname + '-';
-const CACHE = PREFIX + '0f950f8e186dfdb5';
+const CACHE = PREFIX + 'd0944e7058e3e01d';
 self.addEventListener('install', event => event.waitUntil((async () => {
  const cache = await caches.open(CACHE);
  try {
