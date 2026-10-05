@@ -749,6 +749,224 @@
         transition: none;
       }
     }
+  
+    /* =========================
+       INTERACTIVE UX ENHANCEMENTS
+       ========================= */
+
+    h1 {
+      position: relative;
+      display: inline-block;
+      cursor: crosshair;
+      overflow: hidden;
+    }
+
+    h1::after {
+      content: "";
+      position: absolute;
+      left: -15%;
+      top: -20%;
+      width: 2px;
+      height: 140%;
+      opacity: 0;
+      pointer-events: none;
+      background: linear-gradient(
+        to bottom,
+        transparent,
+        rgba(54,169,255,.95),
+        rgba(57,255,20,.95),
+        transparent
+      );
+      box-shadow:
+        0 0 8px rgba(54,169,255,.75),
+        0 0 16px rgba(57,255,20,.38);
+    }
+
+    h1:hover::after,
+    h1:focus-within::after {
+      opacity: 1;
+      animation: nameScan 1.15s ease-in-out;
+    }
+
+    @keyframes nameScan {
+      from { left: -15%; }
+      to { left: 115%; }
+    }
+
+    .card {
+      cursor: default;
+      isolation: isolate;
+    }
+
+    .card:hover {
+      transform: translateY(-8px) scale(1.012);
+      border-color: rgba(57,255,20,.62);
+      box-shadow:
+        0 22px 48px rgba(0,0,0,.38),
+        0 0 26px rgba(57,255,20,.085),
+        inset 0 0 22px rgba(54,169,255,.025);
+    }
+
+    .card .lab-code::after {
+      content: "  •  READY";
+      color: rgba(54,169,255,.72);
+      font-size: 10px;
+      letter-spacing: .09em;
+    }
+
+    .lab-tooltip {
+      position: absolute;
+      z-index: 8;
+      left: 18px;
+      right: 18px;
+      top: 58px;
+      padding: 11px 12px;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(7px);
+      pointer-events: none;
+      color: #cbd7e2;
+      border: 1px solid rgba(54,169,255,.34);
+      background: rgba(4,9,15,.96);
+      box-shadow: 0 12px 28px rgba(0,0,0,.32);
+      font-family: "Courier New", monospace;
+      font-size: 11px;
+      line-height: 1.45;
+      transition:
+        opacity .18s ease,
+        transform .18s ease,
+        visibility .18s ease;
+    }
+
+    .lab-tooltip::before {
+      content: "INFO // ";
+      color: var(--green);
+      font-weight: 700;
+    }
+
+    .card:hover .lab-tooltip,
+    .card:focus-within .lab-tooltip {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .open {
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+    }
+
+    .open::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      transform: translateX(-115%);
+      background: linear-gradient(
+        100deg,
+        transparent 25%,
+        rgba(255,255,255,.20) 50%,
+        transparent 75%
+      );
+      transition: transform .48s ease;
+      pointer-events: none;
+    }
+
+    .open:hover::after,
+    .open:focus-visible::after {
+      transform: translateX(115%);
+    }
+
+    .open:focus-visible {
+      outline: 2px solid var(--blue);
+      outline-offset: 3px;
+    }
+
+    .security-toast {
+      position: fixed;
+      z-index: 50;
+      left: 50%;
+      bottom: 24px;
+      transform: translate(-50%, 16px);
+      padding: 10px 14px;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      color: var(--green);
+      border: 1px solid rgba(57,255,20,.42);
+      background: rgba(4,9,14,.94);
+      box-shadow:
+        0 12px 35px rgba(0,0,0,.40),
+        0 0 20px rgba(57,255,20,.08);
+      font-family: "Courier New", monospace;
+      font-size: 11px;
+      letter-spacing: .055em;
+      transition:
+        opacity .22s ease,
+        transform .22s ease,
+        visibility .22s ease;
+    }
+
+    .security-toast.show {
+      opacity: 1;
+      visibility: visible;
+      transform: translate(-50%, 0);
+    }
+
+    .cursor-dot {
+      position: fixed;
+      z-index: 100;
+      width: 7px;
+      height: 7px;
+      left: 0;
+      top: 0;
+      border-radius: 50%;
+      opacity: 0;
+      pointer-events: none;
+      background: var(--green);
+      box-shadow:
+        0 0 8px rgba(57,255,20,.8),
+        0 0 16px rgba(54,169,255,.35);
+      transform: translate(-50%, -50%);
+      transition:
+        width .12s ease,
+        height .12s ease,
+        opacity .18s ease,
+        background .12s ease;
+    }
+
+    .cursor-dot.active {
+      width: 13px;
+      height: 13px;
+      background: var(--blue);
+    }
+
+    @media (hover: none), (pointer: coarse) {
+      .cursor-dot {
+        display: none;
+      }
+
+      .lab-tooltip {
+        display: none;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      h1:hover::after,
+      h1:focus-within::after {
+        animation: none !important;
+        opacity: 0 !important;
+      }
+
+      .cursor-dot {
+        display: none;
+      }
+
+      .card:hover {
+        transform: none;
+      }
+    }
+
   </style>
 </head>
 
@@ -850,6 +1068,8 @@
           LAB_01 // XSS
         </div>
 
+        <div class="lab-tooltip" role="note">Shows how untrusted input can become executable browser content, and contrasts it with safer text rendering.</div>
+
         <h3>
           Cross-Site Scripting
         </h3>
@@ -870,6 +1090,8 @@
         <div class="lab-code">
           LAB_02 // IDOR
         </div>
+
+        <div class="lab-tooltip" role="note">Shows why object identifiers alone are not authorization, and why ownership must be checked server-side.</div>
 
         <h3>
           Broken Access Control
@@ -892,6 +1114,8 @@
           LAB_03 // SQLi
         </div>
 
+        <div class="lab-tooltip" role="note">Shows the difference between unsafe query-string construction and parameterized SQL handling.</div>
+
         <h3>
           SQL Injection
         </h3>
@@ -912,6 +1136,8 @@
         <div class="lab-code">
           LAB_04 // API
         </div>
+
+        <div class="lab-tooltip" role="note">Shows how malformed or unexpected JSON should be rejected through explicit server-side validation.</div>
 
         <h3>
           API Input Validation
@@ -944,46 +1170,100 @@
 
   </main>
 
+  <div class="security-toast" id="securityToast" role="status" aria-live="polite">
+    &gt; Security testing mode active_
+  </div>
+
+  <div class="cursor-dot" id="cursorDot" aria-hidden="true"></div>
+
   <script>
     (() => {
-      const circuit = document.getElementById("circuitBackground");
-
-      if (!circuit) return;
-
       const reducedMotion =
         window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const finePointer =
+        window.matchMedia("(hover: hover) and (pointer: fine)").matches;
 
-      if (reducedMotion) return;
+      /* Existing circuit-background parallax */
+      const circuit = document.getElementById("circuitBackground");
 
-      let targetX = 0;
-      let targetY = 0;
-      let currentX = 0;
-      let currentY = 0;
+      if (circuit && !reducedMotion) {
+        let targetX = 0;
+        let targetY = 0;
+        let currentX = 0;
+        let currentY = 0;
 
-      document.addEventListener("mousemove", (event) => {
-        const x = event.clientX / window.innerWidth - 0.5;
-        const y = event.clientY / window.innerHeight - 0.5;
+        document.addEventListener("mousemove", (event) => {
+          const x = event.clientX / window.innerWidth - 0.5;
+          const y = event.clientY / window.innerHeight - 0.5;
 
-        targetX = x * -14;
-        targetY = y * -10;
-      });
+          targetX = x * -14;
+          targetY = y * -10;
+        }, { passive: true });
 
-      document.addEventListener("mouseleave", () => {
-        targetX = 0;
-        targetY = 0;
-      });
+        document.addEventListener("mouseleave", () => {
+          targetX = 0;
+          targetY = 0;
+        });
 
-      function animateBackground() {
-        currentX += (targetX - currentX) * 0.035;
-        currentY += (targetY - currentY) * 0.035;
+        const animateBackground = () => {
+          currentX += (targetX - currentX) * 0.035;
+          currentY += (targetY - currentY) * 0.035;
 
-        circuit.style.transform =
-          `translate3d(${currentX}px, ${currentY}px, 0)`;
+          circuit.style.transform =
+            `translate3d(${currentX}px, ${currentY}px, 0)`;
 
-        requestAnimationFrame(animateBackground);
+          requestAnimationFrame(animateBackground);
+        };
+
+        animateBackground();
       }
 
-      animateBackground();
+      /* Small security cursor accent — desktop only */
+      const cursorDot = document.getElementById("cursorDot");
+
+      if (cursorDot && finePointer && !reducedMotion) {
+        document.addEventListener("mousemove", (event) => {
+          cursorDot.style.left = `${event.clientX}px`;
+          cursorDot.style.top = `${event.clientY}px`;
+          cursorDot.style.opacity = "0.78";
+        }, { passive: true });
+
+        document.addEventListener("mouseleave", () => {
+          cursorDot.style.opacity = "0";
+        });
+
+        document.querySelectorAll("a, .card, h1").forEach((element) => {
+          element.addEventListener("mouseenter", () => {
+            cursorDot.classList.add("active");
+          });
+
+          element.addEventListener("mouseleave", () => {
+            cursorDot.classList.remove("active");
+          });
+        });
+      }
+
+      /* Hidden portfolio detail: appears briefly on first lab interaction */
+      const securityToast = document.getElementById("securityToast");
+      let toastShown = false;
+      let toastTimer;
+
+      const showSecurityToast = () => {
+        if (!securityToast || toastShown) return;
+
+        toastShown = true;
+        securityToast.classList.add("show");
+
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => {
+          securityToast.classList.remove("show");
+        }, 2200);
+      };
+
+      document.querySelectorAll(".card").forEach((card) => {
+        card.addEventListener("mouseenter", showSecurityToast, { once: true });
+        card.addEventListener("focusin", showSecurityToast, { once: true });
+      });
     })();
   </script>
 
