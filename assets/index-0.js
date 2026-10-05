@@ -136,3 +136,19 @@
  window.addEventListener('pagehide',stop,{once:true});
  timer = setTimeout(scan,600);
 })();
+
+/* Shared circuit background automatically applies to existing and future lab cards. */
+(() => {
+  function decorateCards() {
+    const template = document.getElementById('card-circuit-template');
+    if (!template) return;
+    document.querySelectorAll('.labs .card:not(.audit-card)').forEach(card => {
+      if (card.querySelector('.card-circuit')) return;
+      card.prepend(template.content.cloneNode(true));
+    });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', decorateCards, { once: true });
+  else decorateCards();
+  const labs = document.querySelector('.labs');
+  if (labs) new MutationObserver(decorateCards).observe(labs, { childList: true, subtree: true });
+})();

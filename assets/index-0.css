@@ -1292,3 +1292,23 @@ body.hardened .hardening-panel{max-height:900px}
 /* Remove stationary pulsing dots and outlined circuit endpoints. */
 .circuit-bg .node{display:none;animation:none}
 .circuit-bg .trace::after{content:none;display:none}
+
+/* Shared behind-text artwork: never participates in card sizing. */
+.labs .card{isolation:isolate;background:#050c13}
+.labs .card > :not(svg):not(.audit-photo-background):not(.lab-tooltip){position:relative;z-index:2}
+.labs .card .lab-tooltip{z-index:8}
+.labs .card::after{inset:0;width:auto;height:auto;transform:none;border:0;z-index:1;pointer-events:none;background:linear-gradient(180deg,rgba(3,10,17,.48),rgba(3,10,17,.87) 28%,rgba(3,10,17,.78) 76%,rgba(3,10,17,.55))}
+.card-circuit{position:absolute;inset:0;width:100%;height:100%;z-index:0;opacity:.65;pointer-events:none}
+.card-circuit .audit-trace{stroke:#23d6e6;stroke-width:.85;opacity:.6}
+.card-circuit .trace-1{stroke:#37edaa}.card-circuit .trace-2{stroke:#239fff}
+.card-circuit .audit-bright{fill:none;stroke:#42e7df;stroke-width:1.9;opacity:.9}
+.card-circuit .audit-pulse{stroke-width:3;animation-duration:18s}
+.card-circuit .audit-node{fill:#72ffdf;filter:drop-shadow(0 0 3px #29ffbd)}
+.card-circuit .audit-micro{fill:none;stroke:#329bc4;stroke-width:.65;opacity:.38}
+.labs .card h3,.labs .card p,.labs .card .lab-code{text-shadow:0 2px 4px #02060c,0 0 8px #02060c}
+.audit-photo-background{position:absolute;inset:0;z-index:0;background:url('audit-background.webp') center center/cover no-repeat;pointer-events:none}
+.audit-image-pulses{position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:.8}
+.audit-image-pulses .audit-pulse{stroke-width:4;stroke-dasharray:2 98;animation-duration:24s;filter:drop-shadow(0 0 5px #16dbd6)}
+.audit-image-pulses .p1,.audit-image-pulses .p3{stroke:#32bfff}
+.audit-card .lab-tooltip{font-size:clamp(17px,1.35vw,19px)}
+@media(prefers-reduced-motion:reduce){.card-circuit .audit-pulse,.audit-image-pulses .audit-pulse{animation:none;stroke-dasharray:none;opacity:.15}}
