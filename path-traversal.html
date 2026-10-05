@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; script-src-attr 'none'; style-src 'self'; img-src 'self'; font-src 'none'; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-src 'self'; worker-src 'self'">
+<meta name="referrer" content="no-referrer">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Path Traversal Lab</title>
+
+<link rel="stylesheet" href="assets/extra-labs.css">
+<link rel="stylesheet" href="assets/offline.css">
+<script src="assets/offline.js" defer></script>
+<script src="assets/language.js" defer></script>
+</head>
+
+<body><div class="container"><a href="index.html">← Back to Security Lab</a><h1>Path Traversal</h1><p class="subtitle">Compare unsafe file paths with canonical path boundary checks.</p><div class="lab"><label for="path">Requested file path</label><input id="path" value="../private/secrets.txt"><p class="subtitle">Public files: guide.txt and notes.txt. Try guide.txt, ../private/secrets.txt or %2e%2e/private/secrets.txt.</p><div class="buttons"><button type="button" class="vulnerable" id="action-0">🔓 Run Vulnerable</button><button type="button" class="protected" id="action-1">🛡 Run Protected</button></div><div id="result" class="result" role="status" aria-live="polite" aria-atomic="true">Choose Vulnerable or Protected to compare the results.</div></div><div class="info">Educational simulation using fictional data. Runs entirely in your browser; no real accounts, files or server requests are involved.</div></div><script src="assets/path-traversal.js" defer></script></body></html>

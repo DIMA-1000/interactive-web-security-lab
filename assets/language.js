@@ -1,4 +1,17 @@
 const NORWEGIAN = {
+"Cross-Site Request Forgery (CSRF)": "Forfalskning av foresp\u00f8rsler (CSRF)",
+"Path Traversal": "Katalogtraversering",
+"Rate Limiting": "Begrensning av foresp\u00f8rsler",
+"Compare forged requests with origin and CSRF token validation.": "Sammenlign forfalskede foresp\u00f8rsler med kontroll av opprinnelse og CSRF-token.",
+"Compare unsafe file paths with canonical path boundary checks.": "Sammenlign usikre filstier med kontroll av normaliserte kataloggrenser.",
+"Compare unlimited requests with a per-user request limit.": "Sammenlign ubegrensede foresp\u00f8rsler med en grense per bruker.",
+"Request origin": "Foresp\u00f8rselens opprinnelse",
+"CSRF token": "CSRF-token",
+"Requested file path": "\u00d8nsket filsti",
+"Requests in one 60-second window": "Foresp\u00f8rsler i ett 60-sekunders intervall",
+"Choose Vulnerable or Protected to compare the results.": "Velg S\u00e5rbar eller Beskyttet for \u00e5 sammenligne resultatene.",
+"Educational simulation using fictional data. Runs entirely in your browser; no real accounts, files or server requests are involved.": "Pedagogisk simulering med fiktive data. Kj\u00f8rer i nettleseren uten ekte kontoer, filer eller serverforesp\u00f8rsler.",
+
   "My GitHub": "Min GitHub",
   "My Application": "Min applikasjon",
   "← Back to Security Lab": "← Tilbake til sikkerhetslaboratoriet",
