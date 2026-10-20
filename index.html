@@ -2,7 +2,7 @@
 
 <html lang="en">
 <head>
-<meta content="default-src &#x27;none&#x27;; script-src &#x27;self&#x27; &#x27;sha256-Bz4+v90fHqBiwSsr945eyegg5pMBB5eQoq2O0AwvmlM=&#x27;; script-src-attr &#x27;none&#x27;; style-src &#x27;self&#x27; &#x27;sha256-eT44S6ORutvGV6rjOLC99AryZS3TgSZT2Wy0r9eCq3g=&#x27;; style-src-attr &#x27;none&#x27;; img-src &#x27;self&#x27; data:; font-src &#x27;none&#x27;; connect-src &#x27;none&#x27;; object-src &#x27;none&#x27;; base-uri &#x27;none&#x27;; form-action &#x27;none&#x27;; frame-src &#x27;self&#x27;; worker-src &#x27;self&#x27;" http-equiv="Content-Security-Policy"/>
+<meta content="default-src &#x27;none&#x27;; script-src &#x27;self&#x27; &#x27;sha256-Bz4+v90fHqBiwSsr945eyegg5pMBB5eQoq2O0AwvmlM=&#x27;; script-src-attr &#x27;none&#x27;; style-src &#x27;self&#x27; &#x27;sha256-X+dq5doB+pDHc8+KVN5vfmCYk0ss8Raj+5iwif8idkc=&#x27;; style-src-attr &#x27;none&#x27;; img-src &#x27;self&#x27; data:; font-src &#x27;none&#x27;; connect-src &#x27;none&#x27;; object-src &#x27;none&#x27;; base-uri &#x27;none&#x27;; form-action &#x27;none&#x27;; frame-src &#x27;self&#x27;; worker-src &#x27;self&#x27;" http-equiv="Content-Security-Policy"/>
 <meta content="no-referrer" name="referrer"/>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
@@ -256,6 +256,16 @@ body.app-modal-open{overflow:hidden!important} .app-preview-overlay.is-open{disp
 .market-gallery-viewport .market-card{flex:0 1 calc((100% - 48px)/3)!important;max-width:calc((100% - 48px)/3)!important;}
 .market-gallery-overlay[data-gallery="ai"] .market-gallery-viewport .market-card{flex-basis:calc((100% - 24px)/2)!important;max-width:calc((100% - 24px)/2)!important;}
 @media(max-width:700px){.market-gallery-viewport .market-card,.market-gallery-overlay[data-gallery="ai"] .market-gallery-viewport .market-card{flex:1 1 100%!important;max-width:100%!important;}}
+
+/* Gallery alignment repair: equal slots, centered complete images, fixed controls */
+.market-gallery-overlay{overflow:hidden!important;background:#03080e!important}
+.market-gallery-frame{box-sizing:border-box!important;overflow:hidden!important;width:min(1500px,100%)!important;height:min(850px,94dvh)!important;max-height:94dvh!important;padding:52px 58px 48px!important}
+.market-gallery-viewport{display:grid!important;grid-auto-flow:column!important;align-items:stretch!important;justify-content:center!important;gap:clamp(12px,1.6vw,26px)!important;width:100%!important;height:100%!important;min-width:0!important;min-height:0!important;overflow:hidden!important}
+.market-gallery-viewport .market-card{box-sizing:border-box!important;display:grid!important;grid-template-columns:minmax(0,1fr)!important;grid-template-rows:minmax(0,1fr) auto!important;justify-items:center!important;align-items:center!important;align-content:stretch!important;width:100%!important;height:100%!important;min-width:0!important;min-height:0!important;max-width:100%!important;max-height:100%!important;overflow:hidden!important;padding:8px 0!important;gap:12px!important;flex:none!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important}
+.market-gallery-viewport .market-card img{box-sizing:border-box!important;display:block!important;width:100%!important;height:100%!important;min-width:0!important;min-height:0!important;max-width:100%!important;max-height:100%!important;object-fit:contain!important;object-position:center center!important;flex:none!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important}
+.market-gallery-viewport .market-card span{box-sizing:border-box!important;display:block!important;width:100%!important;max-width:100%!important;min-height:0!important;max-height:3.2em!important;overflow:hidden!important;text-align:center!important;line-height:1.35!important;margin:0!important}
+.market-gallery-arrow{top:50%!important;transform:translateY(-50%)!important}
+@media(max-width:700px){.market-gallery-frame{width:100%!important;height:100dvh!important;max-height:100dvh!important;padding:62px 44px 58px!important}.market-gallery-viewport{gap:0!important}.market-gallery-viewport .market-card{padding:4px 0!important;gap:10px!important}}
 </style>
 </head>
 <body>
