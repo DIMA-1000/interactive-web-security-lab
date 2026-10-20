@@ -2,7 +2,7 @@
 
 <html lang="en">
 <head>
-<meta content="default-src 'none'; script-src 'self' 'sha256-1dV1eKMWPuwUAhxLX44F/dNug1DUeI2swgxT7O8bhOw='; script-src-attr 'none'; style-src 'self' 'sha256-qprfy0dpXdG8Y+Pjmro/dBIHGxbvq6tsKLJ+vwMNKJo='; style-src-attr 'none'; img-src 'self' data:; font-src 'none'; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-src 'self'; worker-src 'self'" http-equiv="Content-Security-Policy"/>
+<meta content="default-src 'none'; script-src 'self' 'sha256-CxGDr1nt1UQ4wO8evExAIoEtZbXMxf2qHmounEwSjdQ='; script-src-attr 'none'; style-src 'self' 'sha256-W96SoLkWuUsk2yjd9lh0ffxmBjtZXJj9jU1EuqDZ48Y='; style-src-attr 'none'; img-src 'self' data:; font-src 'none'; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-src 'self'; worker-src 'self'" http-equiv="Content-Security-Policy"/>
 <meta content="no-referrer" name="referrer"/>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
@@ -279,6 +279,9 @@ body.app-modal-open{overflow:hidden!important} .app-preview-overlay.is-open{disp
 .market-tile .tile-caption{flex:1 0 78px!important;min-height:78px!important;box-sizing:border-box!important}
 /* Gallery photos remain centered within a fixed, visible viewport */
 .market-gallery-viewport{min-width:0!important;min-height:0!important;overflow:hidden!important;align-items:center!important;justify-content:center!important}
+.market-gallery-viewport[data-columns="1"]{grid-template-columns:minmax(0,1fr)!important;}
+.market-gallery-viewport[data-columns="2"]{grid-template-columns:repeat(2,minmax(0,1fr))!important;}
+.market-gallery-viewport[data-columns="3"]{grid-template-columns:repeat(3,minmax(0,1fr))!important;}
 .market-gallery-viewport .market-card{min-width:0!important;min-height:0!important;overflow:hidden!important}
 .market-gallery-viewport .market-card img{min-width:0!important;min-height:0!important;max-width:100%!important;max-height:100%!important;object-fit:contain!important;object-position:center!important}
 @media(max-width:700px){.market-tile .tile-caption{flex-basis:78px!important;min-height:78px!important}.market-tile.locked .locked-flag{bottom:6%!important;right:7%!important}}
@@ -351,6 +354,69 @@ body.app-modal-open{overflow:hidden!important} .app-preview-overlay.is-open{disp
  .market-gallery-viewport{grid-template-columns:minmax(0,1fr)!important;gap:0!important;}
  .market-gallery-viewport .market-card{min-width:0!important;}
 }
+
+/* 2026-10-20: unified image presentation; original image bytes untouched */
+.market-tile,.market-tile-trigger,.market-tile .tile-picture{box-sizing:border-box!important;}
+.market-tile{background:#030b12!important;border:0!important;box-shadow:none!important;overflow:visible!important;}
+.market-tile .tile-picture{border:1px solid #57dc4b!important;border-radius:15px!important;overflow:hidden!important;aspect-ratio:.73!important;background:#03080e!important;}
+.market-tile .tile-caption{background:#030b12!important;border:0!important;outline:0!important;box-shadow:none!important;}
+.market-tile[data-market="tools"] .catalog-cover{object-fit:contain!important;transform:none!important;object-position:center!important;}
+.market-tile[data-market="ai"] .ai-cover-img{object-fit:contain!important;transform:none!important;object-position:center!important;position:relative!important;z-index:2!important;}
+.market-tile[data-market="ai"] .tile-art-placeholder::before{inset:-20%!important;filter:blur(20px) saturate(1.4)!important;opacity:.8!important;}
+.market-gallery-viewport{display:grid!important;align-items:center!important;justify-content:center!important;gap:clamp(14px,2.5vw,34px)!important;}
+.market-gallery-viewport .market-card{min-width:0!important;width:100%!important;height:100%!important;max-width:none!important;max-height:none!important;display:grid!important;grid-template-rows:minmax(0,1fr) auto!important;justify-items:center!important;align-items:center!important;}
+.market-gallery-viewport .market-card img{display:block!important;object-fit:contain!important;object-position:center!important;width:100%!important;height:100%!important;max-width:100%!important;max-height:100%!important;min-width:0!important;min-height:0!important;margin:auto!important;}
+.market-gallery-viewport .market-card span{text-align:center!important;}
+@media(min-width:701px){
+ .market-gallery-frame{padding:62px clamp(48px,5.5vw,94px) 52px!important;}
+ .market-gallery-viewport{grid-template-columns:repeat(2,minmax(0,1fr))!important;}
+ .market-gallery-overlay[data-gallery="ai"] .market-gallery-viewport{gap:clamp(16px,3vw,42px)!important;}
+}
+@media(max-width:700px){
+ .market-gallery-viewport{grid-template-columns:minmax(0,1fr)!important;gap:0!important;}
+ .market-tile-grid{align-items:start!important;}
+ .market-tile .tile-picture{aspect-ratio:.73!important;}
+ .market-tile .tile-caption{padding:10px 3px 12px!important;min-height:52px!important;display:flex!important;align-items:center!important;justify-content:center!important;}
+}
+
+/* Final gallery pagination: desktop orientation-specific; mobile single image. */
+.market-gallery-viewport{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:clamp(14px,2vw,30px)!important;align-items:center!important;justify-items:center!important;}
+.market-gallery-viewport .market-card{min-width:0!important;max-width:100%!important;width:100%!important;height:100%!important;display:grid!important;grid-template-rows:minmax(0,1fr) auto!important;place-items:center!important;}
+.market-gallery-viewport .market-card img{width:100%!important;height:100%!important;max-width:100%!important;max-height:100%!important;object-fit:contain!important;object-position:center!important;}
+@media(max-width:700px){.market-gallery-viewport{grid-template-columns:minmax(0,1fr)!important;gap:0!important;}}
+
+/* Unified single-image carousel, desktop and mobile */
+.market-gallery-viewport[data-columns="1"]{display:grid!important;grid-template-columns:minmax(0,1fr)!important;place-items:center!important;gap:0!important}
+.market-gallery-viewport[data-columns="1"] .market-card{width:100%!important;max-width:100%!important;height:100%!important;max-height:100%!important;min-height:0!important;justify-self:center!important;align-self:center!important;grid-template-rows:minmax(0,1fr) auto!important;padding:clamp(8px,1.6vh,20px) clamp(8px,1.6vw,24px)!important;gap:clamp(8px,1.2vh,14px)!important}
+.market-gallery-viewport[data-columns="1"] .market-card img{display:block!important;width:100%!important;height:100%!important;min-width:0!important;min-height:0!important;max-width:100%!important;max-height:100%!important;object-fit:contain!important;object-position:50% 50%!important;margin:auto!important}
+@media(max-width:700px){.market-gallery-viewport[data-columns="1"] .market-card{padding:clamp(8px,2vh,18px) 4px!important}}
+
+
+/* Cinematic catalog enhancements — GPU-friendly, device adaptive */
+#app-preview{--fx-duration:520ms;--fx-scan:900ms;--fx-strength:1}
+#app-preview.fx-lite{--fx-duration:280ms;--fx-scan:550ms;--fx-strength:.45}
+#app-preview .app-catalog-panel{position:relative;isolation:isolate}
+#app-preview .market-tile{perspective:900px;position:relative;transition:transform var(--fx-duration) cubic-bezier(.2,.8,.2,1),filter var(--fx-duration) ease;transform:translate3d(0,0,0);}
+#app-preview .market-tile:not(.scanning):not(.denied):hover{transform:translate3d(0,-4px,0) rotateX(var(--tilt-x,0deg)) rotateY(var(--tilt-y,0deg));}
+#app-preview .market-tile .tile-picture{position:relative;isolation:isolate;}
+#app-preview .market-tile .tile-picture::after{content:"";position:absolute;inset:0;z-index:6;pointer-events:none;opacity:0;background:linear-gradient(115deg,transparent 30%,rgba(182,255,180,.2) 48%,transparent 65%);transform:translateX(-110%);transition:transform 650ms ease,opacity 650ms ease;}
+#app-preview .market-tile:hover .tile-picture::after{opacity:.8;transform:translateX(110%)}
+#app-preview .market-tile.scanning .tile-picture::after{opacity:1;transform:translateX(110%);transition-duration:var(--fx-scan)}
+#app-preview .market-tile.scanning .tile-picture::before{content:"";position:absolute;inset:0;z-index:7;pointer-events:none;background:linear-gradient(to bottom,transparent 46%,rgba(99,255,96,.8) 50%,transparent 54%);background-size:100% 26%;animation:catalog-scan var(--fx-scan) linear 1;}
+@keyframes catalog-scan{from{transform:translateY(-125%);opacity:.8}to{transform:translateY(125%);opacity:0}}
+#app-preview .market-tile.is-selected .tile-picture{animation:energy-pulse 3s ease-in-out infinite;}
+@keyframes energy-pulse{0%,100%{box-shadow:0 0 5px rgba(80,250,80,.22)}50%{box-shadow:0 0 16px rgba(80,250,80,.75),inset 0 0 6px rgba(80,250,80,.2)}}
+#app-preview .market-gallery-viewport .market-card{animation:cinematic-enter var(--fx-duration) cubic-bezier(.2,.75,.25,1) both!important;}
+@keyframes cinematic-enter{from{opacity:.12;transform:translate3d(0,8px,0) scale(.975)}to{opacity:1;transform:translate3d(0,0,0) scale(1)}}
+#app-preview .market-tile.denied .tile-picture{animation:locked-glitch .36s steps(2,end) 2}
+@keyframes locked-glitch{0%,100%{transform:translateX(0)}25%{transform:translateX(-3px)}50%{transform:translateX(3px)}75%{transform:translateX(-1px)}}
+#app-preview .fx-particles{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:0;contain:paint;}
+#app-preview .fx-particle{position:absolute;width:2px;height:2px;border-radius:50%;background:#8efc8a;opacity:.4;box-shadow:0 0 7px #70fa6d;animation:fx-drift var(--drift-time,12s) linear infinite alternate;}
+@keyframes fx-drift{from{transform:translate3d(0,0,0);opacity:.12}to{transform:translate3d(var(--drift-x,16px),var(--drift-y,-25px),0);opacity:.48}}
+#app-preview.fx-paused .fx-particle,#app-preview.fx-paused .market-tile.is-selected .tile-picture{animation-play-state:paused!important}
+#app-preview.fx-lite .fx-particle{display:none}
+@media(max-width:700px){#app-preview .market-tile:hover{transform:none!important}#app-preview .market-tile .tile-picture::after{transition-duration:400ms}}
+@media(prefers-reduced-motion:reduce){#app-preview .fx-particle,#app-preview .market-tile .tile-picture::after,#app-preview .market-tile .tile-picture::before{animation:none!important;transition:none!important}#app-preview .market-gallery-viewport .market-card{animation:none!important}#app-preview .market-tile{transition:none!important}}
 </style>
 </head>
 <body>
@@ -557,27 +623,49 @@ const overlay=root.querySelector('.market-gallery-overlay');
 const viewport=root.querySelector('.market-gallery-viewport');
 const counter=root.querySelector('.market-gallery-count');
 const fullscan=document.querySelector('.market-fullscan');
-let active='',position=0,scanTimer=null,resetTimer=null,carouselTimer=null,scanToken=0,firstAppScanDone=false;
+let active='',position=0,scanTimer=null,resetTimer=null,carouselTimer=null,scanToken=0;
+const reducedMotion=matchMedia('(prefers-reduced-motion: reduce)');
+const weakDevice=()=>reducedMotion.matches||(navigator.deviceMemory&&navigator.deviceMemory<=2)||(navigator.hardwareConcurrency&&navigator.hardwareConcurrency<=2);
+const refreshFX=()=>root.classList.toggle('fx-lite',!!weakDevice());refreshFX();
+const fxLayer=document.createElement('div');fxLayer.className='fx-particles';fxLayer.setAttribute('aria-hidden','true');root.querySelector('.app-catalog-panel')?.prepend(fxLayer);
+if(!weakDevice()){const n=mobile()?5:13;for(let i=0;i<n;i++){const p=document.createElement('i');p.className='fx-particle';p.style.left=((i*37+13)%97)+'%';p.style.top=((i*29+19)%92)+'%';p.style.setProperty('--drift-x',((i%2?1:-1)*(12+i%17))+'px');p.style.setProperty('--drift-y',(-(14+i%28))+'px');p.style.setProperty('--drift-time',(10+i%9)+'s');fxLayer.appendChild(p)}}
+document.addEventListener('visibilitychange',()=>root.classList.toggle('fx-paused',document.hidden));
 const mobile=()=>window.matchMedia('(max-width:700px)').matches;
 const cardsFor=id=>[...root.querySelectorAll('#market-panel-'+id+' .market-card')];
 function stopScan(){scanToken++;clearTimeout(scanTimer);clearTimeout(resetTimer);scanTimer=resetTimer=null;tiles.forEach(t=>t.classList.remove('scanning','granted','denied'));if(fullscan)fullscan.classList.remove('run');}
 function stopCarousel(){clearInterval(carouselTimer);carouselTimer=null;}
-function closeGallery(){resetZoom();stopCarousel();overlay.hidden=true;viewport.replaceChildren();active='';tiles.forEach(t=>t.querySelector('button')?.setAttribute('aria-expanded','false'));}
-function draw(){resetZoom();if(!active)return;const cards=cardsFor(active);if(!cards.length){counter.textContent='';return;}const size=(active==='ai'&&!mobile())?2:1;if(position>=cards.length)position=0;if(size===2&&position===cards.length-1)position=Math.max(0,cards.length-2);const visible=cards.slice(position,position+size);viewport.replaceChildren();for(const card of visible){const item=card.cloneNode(true);viewport.appendChild(item);}viewport.style.gridTemplateColumns='repeat('+visible.length+',minmax(0,1fr))';counter.textContent=(position+1)+'–'+(position+visible.length)+' / '+cards.length;}
-function advance(dir){if(!active)return;const n=cardsFor(active).length;if(!n)return;const size=(active==='ai'&&!mobile())?2:1;position=dir>0?(position+size>=n?0:position+size):(position===0?Math.floor((n-1)/size)*size:Math.max(0,position-size));draw();}
-function openGallery(id){stopScan();closeGallery();active=id;position=0;overlay.dataset.gallery=id;overlay.hidden=false;tiles.forEach(t=>t.querySelector('button')?.setAttribute('aria-expanded',String(t.dataset.market===id)));draw();}
+function closeGallery(){resetZoom();stopCarousel();overlay.hidden=true;viewport.replaceChildren();active='';tiles.forEach(t=>{t.classList.remove('is-selected');t.querySelector('button')?.setAttribute('aria-expanded','false')});}
+const cardOrientations={"games": ["v", "v", "v", "v", "v", "v", "v", "v", "h", "h", "h", "h", "h", "h", "h", "v", "h"], "tools": ["h", "h", "h", "h", "v", "v", "v", "h", "h"], "ai": ["v", "h", "h", "v", "h", "v", "v", "h", "v", "v", "v", "v", "v"]};
+let pageIndex=0;
+function pagesFor(id){
+ // One full-size centered image per page for every gallery and viewport.
+ return cardsFor(id).map((_,i)=>[i]);
+}
+function draw(){
+ resetZoom();if(!active)return;
+ const cards=cardsFor(active),pages=pagesFor(active);
+ if(!pages.length){counter.textContent='';return;}
+ pageIndex=((pageIndex%pages.length)+pages.length)%pages.length;
+ const indices=pages[pageIndex];
+ viewport.replaceChildren();
+ for(const i of indices)viewport.appendChild(cards[i].cloneNode(true));
+ viewport.dataset.columns=String(indices.length);
+ const last=indices[indices.length-1]+1;
+ counter.textContent=indices.length===1?`${indices[0]+1} / ${cards.length}`:`${indices[0]+1}–${last} / ${cards.length}`;
+}
+function advance(dir){if(!active)return;const pages=pagesFor(active);if(!pages.length)return;pageIndex=(pageIndex+(dir>0?1:-1)+pages.length)%pages.length;draw();}
+function openGallery(id){stopScan();closeGallery();active=id;position=0;pageIndex=0;overlay.dataset.gallery=id;overlay.hidden=false;tiles.forEach(t=>{t.classList.toggle('is-selected',t.dataset.market===id);t.querySelector('button')?.setAttribute('aria-expanded',String(t.dataset.market===id))});draw();}
 function start(tile){
  if(location.hash!=='#app-preview')return;
  const id=tile.dataset.market;
  if(id!=='locked' && active===id)return;
  stopScan();
  if(id!=='locked' && active)closeGallery();
- if(id!=='locked' && firstAppScanDone){openGallery(id);return;}
- if(id!=='locked')firstAppScanDone=true;
+ if(weakDevice()||reducedMotion.matches){if(id==='locked'){tile.classList.add('denied');resetTimer=setTimeout(()=>tile.classList.remove('denied'),900)}else openGallery(id);return;}
  const token=scanToken;
  tile.classList.add('scanning');
  // Full-page scan occurs only once, on the first unlocked application.
- if(fullscan){fullscan.classList.remove('run');void fullscan.offsetWidth;fullscan.classList.add('run');}
+ /* Local tile scan only; avoid full-screen GPU repaint. */
  scanTimer=setTimeout(()=>{
   if(token!==scanToken)return;
   tile.classList.remove('scanning');
@@ -588,10 +676,10 @@ function start(tile){
   }else{
    openGallery(id);
   }
- },1700);
+ },900);
 }
 
-for(const tile of tiles){const btn=tile.querySelector('button');if(btn)btn.addEventListener('click',()=>start(tile));}
+for(const tile of tiles){const btn=tile.querySelector('button');if(btn)btn.addEventListener('click',()=>start(tile));if(!mobile()){tile.addEventListener('pointermove',e=>{if(weakDevice()||e.pointerType!=='mouse')return;const r=tile.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;tile.style.setProperty('--tilt-x',(-y*5).toFixed(2)+'deg');tile.style.setProperty('--tilt-y',(x*5).toFixed(2)+'deg')});tile.addEventListener('pointerleave',()=>{tile.style.removeProperty('--tilt-x');tile.style.removeProperty('--tilt-y')})}}
 overlay.querySelector('.market-gallery-close')?.addEventListener('click',closeGallery);
 overlay.querySelector('.market-gallery-backdrop')?.addEventListener('click',closeGallery);
 overlay.querySelector('.market-gallery-arrow.prev')?.addEventListener('click',()=>advance(-1));
@@ -610,22 +698,22 @@ viewport.addEventListener('touchstart',e=>{
 viewport.addEventListener('touchmove',e=>{
  if(!gesture)return;
  if(e.touches.length>=2){const a=e.touches[0],b=e.touches[1];if(gesture.mode!=='pinch'){gesture={mode:'pinch',startDistance:pinchDistance(a,b),startZoom:zoom,startPanX:panX,startPanY:panY,mid:pinchMid(a,b)};}
- const mid=pinchMid(a,b);zoom=Math.max(1,Math.min(5,gesture.startZoom*pinchDistance(a,b)/Math.max(1,gesture.startDistance)));panX=gesture.startPanX+mid.x-gesture.mid.x;panY=gesture.startPanY+mid.y-gesture.mid.y;if(zoom===1)panX=panY=0;applyZoom();e.preventDefault();suppressClickUntil=Date.now()+650;
+ const mid=pinchMid(a,b);zoom=Math.max(1,Math.min(5,gesture.startZoom*pinchDistance(a,b)/Math.max(1,gesture.startDistance)));panX=gesture.startPanX+mid.x-gesture.mid.x;panY=gesture.startPanY+mid.y-gesture.mid.y;if(zoom<=1.025){zoom=1;panX=panY=0;}applyZoom();e.preventDefault();suppressClickUntil=Date.now()+650;
  }else if(gesture.mode==='pan'&&e.touches.length===1){panX=gesture.px+e.touches[0].clientX-gesture.x;panY=gesture.py+e.touches[0].clientY-gesture.y;applyZoom();e.preventDefault();}
 },{passive:false});
 viewport.addEventListener('touchend',e=>{
  if(!gesture)return;
- if(gesture.mode==='pinch'||gesture.mode==='pan'){suppressClickUntil=Date.now()+650;if(!e.touches.length)gesture=null;else gesture={mode:'pan',x:e.touches[0].clientX,y:e.touches[0].clientY,px:panX,py:panY};return;}
+ if(gesture.mode==='pinch'||gesture.mode==='pan'){suppressClickUntil=Date.now()+650;if(!e.touches.length){gesture=null;if(zoom<=1.025){zoom=1;panX=panY=0;applyZoom();}}else gesture={mode:'pan',x:e.touches[0].clientX,y:e.touches[0].clientY,px:panX,py:panY};return;}
  if(!e.touches.length){const dx=e.changedTouches[0].clientX-gesture.x,dy=e.changedTouches[0].clientY-gesture.y;gesture=null;if(zoom<=1.01&&Math.abs(dx)>55&&Math.abs(dx)>Math.abs(dy)*1.3){advance(dx<0?1:-1);suppressClickUntil=Date.now()+500;e.preventDefault();}}
 },{passive:false});
 viewport.addEventListener('touchcancel',()=>{gesture=null;suppressClickUntil=Date.now()+500},{passive:true});
 // Tapping empty dark space advances; interactive controls and captions do not.
 const frame=overlay.querySelector('.market-gallery-frame');
 frame.addEventListener('touchstart',e=>{if(e.touches.length>1)suppressClickUntil=Date.now()+900;},{passive:true});
-frame.addEventListener('click',e=>{if(Date.now()<suppressClickUntil||zoom>1.01)return;if(e.target.closest('button,.market-gallery-count,.market-card span'))return;if(e.target.closest('.market-card img'))return;advance(1);});
+frame.addEventListener('click',e=>{if(Date.now()<suppressClickUntil||zoom>1.01)return;if(e.target.closest('button,.market-gallery-count,.market-card span'))return;advance(1);});
 
 root.querySelectorAll('.app-preview-close,.app-preview-backdrop').forEach(el=>el.addEventListener('click',()=>{stopScan();closeGallery()}));
-window.addEventListener('hashchange',()=>{if(location.hash!=='#app-preview'){stopScan();closeGallery();firstAppScanDone=false}});
+window.addEventListener('hashchange',()=>{if(location.hash!=='#app-preview'){stopScan();closeGallery();}});
 window.addEventListener('resize',()=>{if(active)draw()});
 window.addEventListener('keydown',e=>{
  if(location.hash!=='#app-preview')return;
