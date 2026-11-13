@@ -1,0 +1,36 @@
+name: Publish App Store mosaic v2
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install gallery and enable button
+        run: |
+          unzip -o appstore_mosaic_v2.zip -d .
+          python3 - <<'PYCODE'
+          from pathlib import Path
+          p=Path('index.html')
+          s=p.read_text(encoding='utf-8')
+          import re
+          pattern=r'(<a\s+class="github-projects app-store-projects"\s+)(?![^>]*href=)([^>]*>)'
+          replacement=r'\1href="app-store.html" \2'
+          s,n=re.subn(pattern,replacement,s,count=1)
+          if n:
+              s=s.replace('aria-disabled="true"','',1).replace('aria-label="My App — App Store (coming soon)"','aria-label="My App — App Store gallery"',1)
+              p.write_text(s,encoding='utf-8')
+          elif 'class="github-projects app-store-projects" href="app-store.html"' not in s and 'href="app-store.html"' not in s:
+              raise SystemExit('App Store button not found; index.html left unchanged')
+          PYCODE
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add app-store.html app-store-gallery/ index.html
+          if ! git diff --cached --quiet; then
+            git commit -m "Publish App Store mosaic v2"
+            git push
+          fi
